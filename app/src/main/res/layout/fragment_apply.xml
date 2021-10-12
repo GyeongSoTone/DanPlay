@@ -16,19 +16,18 @@
         tools:layout_editor_absoluteY="0dp">
 
         <TextView
-            android:id="@+id/text_filter"
-            android:layout_width="match_parent"
-            android:layout_height="110dp"
-            android:gravity="bottom"
-            android:paddingLeft="40dp"
             android:text="매칭 등록"
-            android:textColor="@color/black"
             android:textSize="32dp"
-            android:textStyle="bold" />
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="90dp"
             android:gravity="center|bottom">
 
             <TextView
@@ -55,7 +54,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:gravity="center|bottom">
 
             <TextView
@@ -82,7 +81,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:gravity="center|bottom">
 
             <TextView
@@ -109,7 +108,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:gravity="center|bottom">
 
             <TextView
@@ -136,13 +135,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="270dp"
+            android:layout_height="280dp"
             android:gravity="center|bottom"
             android:orientation="vertical">
 
             <EditText
                 android:layout_width="330dp"
-                android:layout_height="150dp"
+                android:layout_height="180dp"
                 android:background="@drawable/edit"
                 android:hint="    내용을 적어주세요\n    + 유의사항\n\n\n"
                 android:textColorHint="@color/gray" />
