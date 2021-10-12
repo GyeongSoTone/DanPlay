@@ -17,7 +17,7 @@
 
         <TextView
             android:text="매칭 등록"
-            android:textSize="32dp"
+            android:textSize="32sp"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:layout_marginTop="30dp"
