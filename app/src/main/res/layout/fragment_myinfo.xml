@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F2F3F7"
-    tools:context=".MyinfoActivity">
+    tools:context=".MyinfoFragment">
 
     <TextView
         android:id="@+id/textView"
@@ -140,41 +140,6 @@
             android:textColor="#000000"
             android:textSize="16sp" />
 
-        <Button
-            android:id="@+id/butto4"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:backgroundTint="#FFFFFF"
-            android:text="앱 버전                                       1.0.0 (20211003)"
-            android:textAlignment="viewStart"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-
-        <Button
-            android:id="@+id/button15"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:backgroundTint="#FFFFFF"
-            android:text="앱 버전                                       1.0.0 (20211003)"
-            android:textAlignment="viewStart"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-
-        <Button
-            android:id="@+id/button16"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:backgroundTint="#FFFFFF"
-            android:text="앱 버전                                       1.0.0 (20211003)"
-            android:textAlignment="viewStart"
-            android:textColor="#000000"
-            android:textSize="16sp" />
 
         </LinearLayout>
 

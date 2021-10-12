@@ -6,14 +6,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 
-class Myinfo : Fragment() {
+class MainpageFragment : Fragment() {
     var viewGroup: ViewGroup? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewGroup = inflater.inflate(R.layout.fragment_myinfo, container, false) as ViewGroup
+        viewGroup = inflater.inflate(R.layout.fragment_mainpage, container, false) as ViewGroup
         return viewGroup
     }
 }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#F2F3F7"
     android:textAlignment="center"
-    tools:context=".MainActivity">
+    tools:context=".MainpageFragment">
 
     <ImageButton
         android:id="@+id/imageButton3"

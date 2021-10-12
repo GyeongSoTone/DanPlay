@@ -5,27 +5,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/homeItem"
+        app:showAsAction="always"
+        android:enabled="true"
+        android:icon="@drawable/ic_round_home_24"
+        android:title="홈" />
+    <item
+        android:id="@+id/applyItem"
+        app:showAsAction="always"
+        android:enabled="true"
+        android:icon="@drawable/ic_round_edit_24"
+        android:title="등록" />
+    <item
         android:id="@+id/searchItem"
         app:showAsAction="always"
         android:enabled="true"
-        android:icon="@drawable/menu_home"
-        android:title="홈" />
-    <item
-        android:id="@+id/cameraItem"
-        app:showAsAction="always"
-        android:enabled="true"
-        android:icon="@drawable/menu_edit"
-        android:title="등록" />
-    <item
-        android:id="@+id/callItem"
-        app:showAsAction="always"
-        android:enabled="true"
-        android:icon="@drawable/menu_search"
+        android:icon="@drawable/ic_baseline_search_24"
         android:title="조회" />
     <item
         android:id="@+id/infoItem"
         app:showAsAction="always"
         android:enabled="true"
-        android:icon="@drawable/menu_mypage"
-        android:title="마이페이지" />
+        android:icon="@drawable/ic_baseline_person_24"
+        android:title="내 정보" />
 </menu>
