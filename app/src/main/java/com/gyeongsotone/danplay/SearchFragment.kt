@@ -27,5 +27,4 @@ class SearchFragment : Fragment() {
         }
         return viewGroup
     }
-
 }

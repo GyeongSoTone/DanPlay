@@ -31,6 +31,11 @@
             android:padding="12dp"/>
     </LinearLayout>
 
+    <CalendarView
+        android:id="@+id/calendarView"
+        app:layout_constraintTop_toBottomOf="@id/ll_match"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="2px"
@@ -38,8 +43,8 @@
         app:layout_constraintTop_toBottomOf="@id/ll_match" />
     <ListView
         android:id="@+id/mainListView"
-        app:layout_constraintTop_toBottomOf="@id/ll_match"
+        app:layout_constraintTop_toBottomOf="@id/calendarView"
         android:layout_width="match_parent"
-        android:layout_height="614dp"
+        android:layout_height="220dp"
         tools:ignore="MissingConstraints" />
 </androidx.constraintlayout.widget.ConstraintLayout>
