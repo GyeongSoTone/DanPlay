@@ -60,19 +60,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
         )
-        var filter = findViewById<ImageButton>(R.id.btn_filter)   // findViewById -> binding으로 교체
-        filter.setOnClickListener(View.OnClickListener {
-
-            val intent = Intent(this, FilterActivity::class.java)
-            startActivity(intent)
-        })
-//
-//        filter.setOnClickListener {
-//            val intent = Intent(this, FilterActivity::class.java)
-//            startActivity(intent)
-//
-//        }
-
 
     }
     override fun onBackPressed() {
