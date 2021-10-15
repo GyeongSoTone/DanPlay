@@ -34,7 +34,13 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun signinEmail() {
-        auth?.signInWithEmailAndPassword(binding.loginIdTextedit.text.toString(), binding.loginPasswordTextedit.text.toString())
+        var loginEmail = binding.loginIdTextedit.text.toString()
+        var loginPwd = binding.loginPasswordTextedit.text.toString()
+        if (loginEmail.equals("") or loginPwd.equals("")) {
+            Toast.makeText(this, "정보를 바르게 입력해주세요", Toast.LENGTH_LONG).show()
+            return
+        }
+        auth?.signInWithEmailAndPassword(loginEmail, loginPwd)
             ?.addOnCompleteListener {
                     task ->
                 if (task.isSuccessful) {
