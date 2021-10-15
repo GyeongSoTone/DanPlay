@@ -10,4 +10,5 @@
     <string name="intro_password">PASSWORD를 입력하세요.</string>
     <string name="login_fail_msg">아이디 또는 비밀번호가 일치하지 않습니다.</string>
     <string name="login_forget_msg"><u>아이디 또는 비밀번호를 잊으셨나요?</u></string>
+    <string name="join"><u>아직 회원이 아니신가요?</u></string>
 </resources>
