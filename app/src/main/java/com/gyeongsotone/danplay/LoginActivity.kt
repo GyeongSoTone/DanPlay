@@ -5,6 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.gyeongsotone.danplay.databinding.ActivityLoginBinding
 import com.gyeongsotone.danplay.databinding.ActivitySignupBinding
+import com.google.firebase.auth.FirebaseAuth
+
+
+
 
 class LoginActivity : AppCompatActivity() {
 
@@ -13,6 +17,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         mBinding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

@@ -12,7 +12,6 @@ class SignupActivity : AppCompatActivity() {
     private var mBinding: ActivitySignupBinding? = null
     private val binding get() = mBinding!!
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
