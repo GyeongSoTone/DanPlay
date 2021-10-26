@@ -8,10 +8,15 @@ import com.gyeongsotone.danplay.databinding.ActivityLoginBinding
 import com.gyeongsotone.danplay.databinding.ActivitySignupBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import com.gyeongsotone.danplay.model.MatchDTO
 
 
 class LoginActivity : AppCompatActivity() {
 
+    private lateinit var database: DatabaseReference
     private var mBinding: ActivityLoginBinding? = null
     private val binding get() = mBinding!!
     private lateinit var auth: FirebaseAuth
@@ -31,6 +36,8 @@ class LoginActivity : AppCompatActivity() {
         binding.login.setOnClickListener{
             signinEmail()
         }
+
+
     }
 
     fun signinEmail() {
