@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.gyeongsotone.danplay.databinding.ActivityLoginBinding
-import com.gyeongsotone.danplay.databinding.ActivitySignupBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
@@ -44,7 +43,7 @@ class LoginActivity : AppCompatActivity() {
             ?.addOnCompleteListener {
                     task ->
                 if (task.isSuccessful) {
-                    Toast.makeText(this, "if Success", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "로그인 성공", Toast.LENGTH_LONG).show()
                     moveMainPage(task.result?.user)
                 } else {
                     //Show the error message

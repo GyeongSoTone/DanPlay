@@ -58,7 +58,7 @@ class SignupActivity : AppCompatActivity() {
                 } else {
                     //if you have account move to login page
                     if (task.exception?.message.equals("The email address is already in use by another account.")) {
-                        Toast.makeText(this, "The email address is already in use by another account.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "이미 존재하는 이메일입니다.", Toast.LENGTH_LONG).show()
                     }
                     //Show the error message
                     else {
@@ -68,14 +68,14 @@ class SignupActivity : AppCompatActivity() {
             }
         }
         else {
-            Toast.makeText(this, "This email is not a valid DKU email", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "알맞은 형식의 이메일이 아닙니다.", Toast.LENGTH_LONG).show()
             return
         }
     }
 
     fun moveLoginPage(user: FirebaseUser?) {
         if (user != null) {
-            Toast.makeText(this, "Signup Success!", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "회원가입에 성공했습니다.", Toast.LENGTH_LONG).show()
             // 다음 페이지로 넘어가는 Intent
             startActivity(Intent(this,LoginActivity::class.java))
             finish()
