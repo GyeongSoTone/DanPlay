@@ -6,53 +6,59 @@
     android:layout_height="match_parent"
     tools:context=".SearchFragment">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ll_match"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:ignore="MissingConstraints">
         <TextView
-            android:text="매치 조회"
-            android:textSize="32sp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="20dp"
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="30dp"
+            android:text="매치 조회"
+            android:textColor="@color/black"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
         <ImageView
             android:id="@+id/btn_filter"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginHorizontal="180dp"
-            android:layout_marginBottom="15dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
             android:src="@drawable/btn_filter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:padding="12dp"/>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <CalendarView
         android:id="@+id/calendarView"
         app:layout_constraintTop_toBottomOf="@id/ll_match"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    <View
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="2px"
-        android:background="@color/dbdbdb"
-        app:layout_constraintTop_toBottomOf="@id/ll_match" />
-    <!--    <ListView-->
-    <!--        android:id="@+id/mainListView"-->
-    <!--        app:layout_constraintTop_toBottomOf="@id/calendarView"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="220dp"-->
-    <!--        tools:ignore="MissingConstraints" />-->
-    <TextView
-        android:id="@+id/today"
-        app:layout_constraintTop_toBottomOf="@id/calendarView"
-        android:text="today is..."
-        android:textSize="50sp"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toBottomOf="@id/calendarView">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/calendarView"
+            android:orientation="vertical">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/calendarView"/>
+            <ListView
+                android:id="@+id/mainListView"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                app:layout_constraintTop_toBottomOf="@id/calendarView"/>
+        </LinearLayout>
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
