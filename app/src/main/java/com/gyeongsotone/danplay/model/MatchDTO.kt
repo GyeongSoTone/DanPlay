@@ -5,6 +5,6 @@ data class MatchDTO(var matchId : String? = null,
                     var participants : String? = null,
                     var place : String? = null,
                     var content : String? = null,
-                    var time : Long? = null,
+                    var time : String? = null,
                     var applytime : Long? = null,) {
 }

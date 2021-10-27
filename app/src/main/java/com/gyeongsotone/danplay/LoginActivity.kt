@@ -28,6 +28,11 @@ class LoginActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         setContentView(binding.root)
 
+        /* 편의를 위해 로고 클릭 시 메인 이동 활성화 */
+        binding.logoDanplay.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
         binding.signUp.setOnClickListener{
             startActivity(Intent(this, SignupActivity::class.java))
             finish()
