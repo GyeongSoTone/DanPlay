@@ -174,6 +174,7 @@ class SignupActivity : AppCompatActivity() {
 
             // Insert birth
             UserDTO.birth = userInfo[1]
+
             // Insert timeStamp
             //UserDTO.timestamp = System.currentTimeMillis()
 
