@@ -1,5 +1,6 @@
 package com.gyeongsotone.danplay
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +27,17 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
 
+    private var prefer_tennis = 0
+    private var prefer_soccer = 0
+    private var prefer_basketball = 0
+    private var prefer_jokgoo = 0
+    private var prefer_futsal = 0
+
+
+
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,18 +46,66 @@ class SignupActivity : AppCompatActivity() {
         database = Firebase.database.reference
         setContentView(binding.root)
 
-        binding.buttonTennis.setOnTouchListener { _: View, event: MotionEvent ->
-            when(event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    binding.buttonTennis.setBackgroundColor(Color.parseColor("#1BBBEE"))
-                }
-                MotionEvent.ACTION_UP -> {
-                    binding.buttonTennis.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
-                }
+        binding.buttonTennis.setOnClickListener {
+            if(binding.buttonTennis.isChecked == true) {
+                binding.buttonTennis.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke));
+                prefer_tennis = 1
 
             }
-            //리턴값은 return 없이 아래와 같이
-            true // or false
+            else
+            {
+                binding.buttonTennis.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                prefer_tennis = 0
+            }
+        }
+
+        binding.buttonSoccer.setOnClickListener {
+            if(binding.buttonSoccer.isChecked == true) {
+                binding.buttonSoccer.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke));
+                prefer_soccer = 1
+
+            }
+            else
+            {
+                binding.buttonSoccer.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                prefer_soccer = 0
+            }
+        }
+
+        binding.buttonBasketball.setOnClickListener {
+            if(binding.buttonBasketball.isChecked == true) {
+                binding.buttonBasketball.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke));
+                prefer_basketball = 1
+            }
+            else
+            {
+                binding.buttonBasketball.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                prefer_basketball = 0
+            }
+        }
+
+        binding.buttonJokgoo.setOnClickListener {
+            if(binding.buttonJokgoo.isChecked == true) {
+                binding.buttonJokgoo.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke));
+                prefer_jokgoo = 1
+            }
+            else
+            {
+                binding.buttonJokgoo.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                prefer_jokgoo = 0
+            }
+        }
+
+        binding.buttonFutsal.setOnClickListener {
+            if(binding.buttonFutsal.isChecked == true) {
+                binding.buttonFutsal.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke));
+                prefer_futsal = 1
+            }
+            else
+            {
+                binding.buttonFutsal.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                prefer_futsal = 0
+            }
         }
 
         binding.buttonSignUp.setOnClickListener{
