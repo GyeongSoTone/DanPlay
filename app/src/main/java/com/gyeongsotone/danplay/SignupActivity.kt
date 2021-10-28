@@ -7,8 +7,12 @@ import android.text.TextUtils
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.gyeongsotone.danplay.databinding.ActivityLoginBinding
 import com.gyeongsotone.danplay.databinding.ActivitySignupBinding
+import com.gyeongsotone.danplay.model.UserDTO
 
 
 class SignupActivity : AppCompatActivity() {
@@ -16,12 +20,15 @@ class SignupActivity : AppCompatActivity() {
     private var mBinding: ActivitySignupBinding? = null
     private val binding get() = mBinding!!
     private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         mBinding = ActivitySignupBinding.inflate(layoutInflater)
         auth = FirebaseAuth.getInstance()
+        database = Firebase.database.reference
         setContentView(binding.root)
 
         binding.buttonSignUp.setOnClickListener{
@@ -33,8 +40,9 @@ class SignupActivity : AppCompatActivity() {
         var userEmail = binding.emailEdittext.text.toString()
         var userPwd = binding.passwordEdittext.text.toString()
         var pwdCheck = binding.passwordCheckEdittext.text.toString()
-        var userName = binding.textUsername.text.toString()
+        var userName = binding.usernameEdittext.text.toString()
         var userBirth = binding.birthEdittext.text.toString()
+        var userInfo = arrayOf(userName, userBirth)
 
 
         // 입력 칸이 비어있다면 리턴
@@ -55,6 +63,8 @@ class SignupActivity : AppCompatActivity() {
             auth?.createUserWithEmailAndPassword(userEmail, userPwd)?.addOnCompleteListener {
                     task ->
                 if (task.isSuccessful) {
+                    // db에 저장
+                    setUserData(task.result?.user, userInfo)
                     moveLoginPage(task.result?.user)
                 } else {
                     //if you have account move to login page
@@ -74,6 +84,23 @@ class SignupActivity : AppCompatActivity() {
         }
     }
 
+    fun setUserData(user: FirebaseUser?, userInfo: Array<String>) {
+        var UserDTO = UserDTO()
+
+        // uid, userId, name, time db에 저장
+        if (user != null) {
+            // Insert name
+            UserDTO.name = userInfo[0]
+
+            // Insert birth
+            UserDTO.birth = userInfo[1]
+            // Insert timeStamp
+            //UserDTO.timestamp = System.currentTimeMillis()
+
+            database.child("user").child(user.uid).setValue(UserDTO)
+
+        }
+    }
     fun moveLoginPage(user: FirebaseUser?) {
         if (user != null) {
             Toast.makeText(this, "회원가입에 성공했습니다.", Toast.LENGTH_LONG).show()
