@@ -252,42 +252,45 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-              <LinearLayout
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:orientation="horizontal"
-                  android:paddingLeft="20dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="20dp">
 
 
-                  <RadioGroup
-                      android:paddingTop="10dp"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:orientation="horizontal"
-                      android:theme="@style/CustomRadioButton"
-                      >
-                  <RadioButton
-                      android:id="@+id/checkbox_male"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:text="남자"
-                      android:textSize="14sp"
-                      android:textStyle="bold"
-                      android:paddingRight="20dp"
+                    <RadioGroup
+                        android:paddingTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:theme="@style/CustomRadioButton"
+                        >
+                        <RadioButton
+                            android:id="@+id/checkbox_male"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="남자"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:paddingRight="20dp"
 
-                      ></RadioButton>
+                            ></RadioButton>
 
-                  <RadioButton
+                        <RadioButton
 
-                      android:id="@+id/checkbox_female"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:text="여자"
-                      android:textSize="14sp"
-                      android:textStyle="bold"
-                      ></RadioButton>
-                  </RadioGroup>
-              </LinearLayout>
+                            android:id="@+id/checkbox_female"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="여자"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            ></RadioButton>
+                    </RadioGroup>
+
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -322,7 +325,8 @@
                         android:text="테니스"
                         android:textColor="@color/gray"
                         android:textStyle="bold"
-                        android:layout_margin="5dp"/>
+                        android:layout_margin="5dp"
+                        />
 
                     <Button
                         android:id="@+id/button_soccer"
