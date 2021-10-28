@@ -150,12 +150,12 @@
                 android:id="@+id/button_filterapply"
                 android:layout_width="350dp"
                 android:layout_height="50dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/btn"
                 android:text="적용"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginTop="30dp"/>
+                android:textStyle="bold" />
 
         </LinearLayout>
     </LinearLayout>
