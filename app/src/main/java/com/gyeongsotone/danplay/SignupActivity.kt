@@ -1,10 +1,14 @@
 package com.gyeongsotone.danplay
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.MotionEvent
+import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
@@ -22,7 +26,6 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -31,9 +34,26 @@ class SignupActivity : AppCompatActivity() {
         database = Firebase.database.reference
         setContentView(binding.root)
 
+        binding.buttonTennis.setOnTouchListener { _: View, event: MotionEvent ->
+            when(event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    binding.buttonTennis.setBackgroundColor(Color.parseColor("#1BBBEE"))
+                }
+                MotionEvent.ACTION_UP -> {
+                    binding.buttonTennis.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+                }
+
+            }
+            //리턴값은 return 없이 아래와 같이
+            true // or false
+        }
+
         binding.buttonSignUp.setOnClickListener{
             signup()
         }
+
+
+
     }
 
     fun signup() {
