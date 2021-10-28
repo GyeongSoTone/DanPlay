@@ -36,6 +36,7 @@ class SignupActivity : AppCompatActivity() {
         var userName = binding.textUsername.text.toString()
         var userBirth = binding.birthEdittext.text.toString()
 
+
         // 입력 칸이 비어있다면 리턴
         if (TextUtils.isEmpty(userEmail) or TextUtils.isEmpty(userPwd) or TextUtils.isEmpty(userName) or TextUtils.isEmpty(userBirth)) {
             Toast.makeText(this, "정보를 바르게 입력해주세요", Toast.LENGTH_LONG).show()
