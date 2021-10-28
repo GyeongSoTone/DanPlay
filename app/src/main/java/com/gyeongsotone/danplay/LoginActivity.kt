@@ -23,8 +23,10 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // init
         mBinding = ActivityLoginBinding.inflate(layoutInflater)
         auth = FirebaseAuth.getInstance()
+        database = Firebase.database.reference
         setContentView(binding.root)
 
         /* 편의를 위해 로고 클릭 시 메인 이동 활성화 */
@@ -55,7 +57,11 @@ class LoginActivity : AppCompatActivity() {
             ?.addOnCompleteListener {
                     task ->
                 if (task.isSuccessful) {
-                    Toast.makeText(this, "로그인 성공", Toast.LENGTH_LONG).show()
+                    database.child("user").child(task.result?.user!!.uid).get().addOnSuccessListener {
+                        Toast.makeText(this, "${it.child("name").value}님 환영합니다!", Toast.LENGTH_LONG).show()
+                    }.addOnFailureListener{
+                        Toast.makeText(this, "Error: 해당 id의 유저가 없습니다.", Toast.LENGTH_LONG).show()
+                    }
                     moveMainPage(task.result?.user)
                 } else {
                     //Show the error message
