@@ -44,15 +44,15 @@ class ApplyFragment : Fragment() {
 
 
         // uid, userId, name, time db에 저장
-        // Insert userId
-        matchDTO.matchId = "2"
-        matchDTO.sports = "tennis"
-        matchDTO.participants = "4"
-        matchDTO.place = "단국대 테니스장2"
-        matchDTO.content = "테니스 칠 사람 모여요~"
-        matchDTO.time = "2021-10-25 10:00:00"
-        matchDTO.applytime = System.currentTimeMillis()
+//        // Insert userId
+//        matchDTO.matchId = "3"
+//        matchDTO.sports = "soccer"
+//        matchDTO.participants = "22"
+//        matchDTO.place = "단국대 대운동"
+//        matchDTO.content = "테니스 칠 사람 모여요~"
+//        matchDTO.time = "2021-10-25 10:00:00"
+//        matchDTO.applytime = System.currentTimeMillis()
 
-        database.child("match").child("123456").setValue(matchDTO)
+        database.child("match").child("1234567").setValue(matchDTO)
     }
 }
