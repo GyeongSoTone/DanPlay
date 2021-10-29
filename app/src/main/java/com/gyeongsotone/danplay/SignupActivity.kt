@@ -58,12 +58,11 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
         prefer_button.add(binding.buttonJokgoo)
         prefer_button.add(binding.buttonFutsal)
 
-
-        for (i in 0 until prefer_button.size-1 step (1)) {
+        for (i in 0 until prefer_button.size step (1)) {
             prefer_button_state.add(0)
         }
 
-        for (i in 0 until prefer_button.size-1 step (1)) {
+        for (i in 0 until prefer_button.size step (1)) {
             prefer_button[i].setOnClickListener(this)
         }
 
@@ -73,7 +72,7 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v : View?) {
-        for (i in 0 until prefer_button.size-1 step (1)){
+        for (i in 0 until prefer_button.size step (1)){
             if(prefer_button[i].isChecked == true) {
                 prefer_button_state.set(i, 1)
                 prefer_button[i].setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke))
@@ -96,7 +95,6 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
                     }
             }
         }
-
     }
 
     private fun signup() {
@@ -168,7 +166,7 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
 
             UserDTO.sex = user_sex
 
-            for (i in 0 until prefer_button.size-1 step (1)) {
+            for (i in 0 until prefer_button.size step (1)) {
                 if(prefer_button_state[i] == 1)
                    user_preference.add(sports_list[i])
             }
