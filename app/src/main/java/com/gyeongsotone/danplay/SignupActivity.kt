@@ -32,7 +32,6 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
     // preference 상태 저장하는 배열 (테니스, 축구, 야구, 족구 풋살 순)
     private var prefer_button_state : ArrayList<Int> = ArrayList()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
