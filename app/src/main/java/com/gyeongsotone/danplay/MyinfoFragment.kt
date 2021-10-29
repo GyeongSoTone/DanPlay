@@ -35,11 +35,11 @@ class MyinfoFragment : Fragment() {
             database.child("user").child(current_user.uid).removeValue()
                 .addOnSuccessListener {
                     // Write was successful!
-                    // ...
+                    // ..
                 }
                 .addOnFailureListener {
                     // Write failed
-                    // ...
+                    // ..
                 }
             current_user.delete()
                 .addOnCompleteListener { task ->
