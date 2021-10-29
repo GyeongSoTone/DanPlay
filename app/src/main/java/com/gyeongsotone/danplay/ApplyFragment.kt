@@ -42,16 +42,18 @@ class ApplyFragment : Fragment() {
         database = Firebase.database.reference
         var matchDTO = MatchDTO()
 
+        var systemTime = System.currentTimeMillis()
 
         // uid, userId, name, time db에 저장
-//        // Insert userId
-//        matchDTO.matchId = "3"
-//        matchDTO.sports = "soccer"
-//        matchDTO.participants = "22"
-//        matchDTO.place = "단국대 대운동"
-//        matchDTO.content = "테니스 칠 사람 모여요~"
-//        matchDTO.time = "2021-10-25 10:00:00"
-//        matchDTO.applytime = System.currentTimeMillis()
+        // Insert userId
+        matchDTO.matchId = 3
+        matchDTO.sports = "soccer"
+        matchDTO.totalNum = "22"
+        matchDTO.currentNum = "1"
+        matchDTO.place = "단국대 대운동장"
+        matchDTO.content = "축구 찰 사람 모여요~"
+        matchDTO.playTime = "2021-10-25 10:00:00"
+        matchDTO.applyTime = System.currentTimeMillis()
 
         database.child("match").child("1234567").setValue(matchDTO)
     }
