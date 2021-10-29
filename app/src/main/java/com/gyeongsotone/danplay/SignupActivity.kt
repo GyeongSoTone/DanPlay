@@ -9,6 +9,7 @@ import android.text.TextUtils
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
+import android.widget.ToggleButton
 import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -27,15 +28,9 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
 
-    private var prefer_tennis = 0
-    private var prefer_soccer = 0
-    private var prefer_basketball = 0
-    private var prefer_jokgoo = 0
-    private var prefer_futsal = 0
-
-
-
-
+    private var prefer_button : ArrayList<ToggleButton> = ArrayList()
+    // preference 상태 저장하는 배열 (테니스, 축구, 야구, 족구 풋살 순)
+    private var prefer_button_state = Array<Int>(5,{0})
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,65 +41,85 @@ class SignupActivity : AppCompatActivity() {
         database = Firebase.database.reference
         setContentView(binding.root)
 
-        binding.buttonTennis.setOnClickListener {
-            if(binding.buttonTennis.isChecked == true) {
-                binding.buttonTennis.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke));
-                prefer_tennis = 1
+
+        prefer_button[0] = binding.buttonTennis
+        prefer_button[1] = binding.buttonSoccer
+        prefer_button[2] = binding.buttonBasketball
+        prefer_button[3] = binding.buttonJokgoo
+        prefer_button[4] = binding.buttonFutsal
+
+        /*for (i in 0 until 4){
+            prefer_button[i].setOnClickListener{
+                if(prefer_button[i].isChecked == true) {
+                    prefer_button_state[i] = 1
+                    prefer_button[i].setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke));
+                } else {
+                    prefer_button_state[i] = 0
+                    prefer_button[i].setBackgroundColor(Color.parseColor("#FFFFFF"))
+                }
+            }
+
+        }*/
+
+        prefer_button[0].setOnClickListener {
+            if(prefer_button[0].isChecked == true) {
+                prefer_button[0].setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke));
+                prefer_button_state[0] = 1
 
             }
             else
             {
-                binding.buttonTennis.setBackgroundColor(Color.parseColor("#FFFFFF"))
-                prefer_tennis = 0
+                prefer_button[0].setBackgroundColor(Color.parseColor("#FFFFFF"))
+                prefer_button_state[0] = 0
             }
         }
 
-        binding.buttonSoccer.setOnClickListener {
-            if(binding.buttonSoccer.isChecked == true) {
-                binding.buttonSoccer.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke));
-                prefer_soccer = 1
+        prefer_button[1].setOnClickListener {
+            if(prefer_button[1].isChecked == true) {
+                prefer_button[1].setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke));
+                prefer_button_state[1] = 1
 
             }
             else
             {
-                binding.buttonSoccer.setBackgroundColor(Color.parseColor("#FFFFFF"))
-                prefer_soccer = 0
+                prefer_button[1].setBackgroundColor(Color.parseColor("#FFFFFF"))
+                prefer_button_state[1] = 0
             }
         }
 
-        binding.buttonBasketball.setOnClickListener {
-            if(binding.buttonBasketball.isChecked == true) {
-                binding.buttonBasketball.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke));
-                prefer_basketball = 1
+        prefer_button[2].setOnClickListener {
+            if(prefer_button[2].isChecked == true) {
+                prefer_button[2].setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke));
+                prefer_button_state[2] = 1
             }
             else
             {
-                binding.buttonBasketball.setBackgroundColor(Color.parseColor("#FFFFFF"))
-                prefer_basketball = 0
+                prefer_button[2].setBackgroundColor(Color.parseColor("#FFFFFF"))
+                prefer_button_state[2] = 0
             }
         }
 
-        binding.buttonJokgoo.setOnClickListener {
-            if(binding.buttonJokgoo.isChecked == true) {
-                binding.buttonJokgoo.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke));
-                prefer_jokgoo = 1
+        prefer_button[3].setOnClickListener {
+            if(prefer_button[3].isChecked == true) {
+                prefer_button[3].setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke));
+                prefer_button_state[3] = 1
             }
             else
             {
-                binding.buttonJokgoo.setBackgroundColor(Color.parseColor("#FFFFFF"))
-                prefer_jokgoo = 0
+                prefer_button[3].setBackgroundColor(Color.parseColor("#FFFFFF"))
+                prefer_button_state[3] = 0
             }
         }
 
-        binding.buttonFutsal.setOnClickListener {
-            if(binding.buttonFutsal.isChecked == true) {
-                binding.buttonFutsal.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke));
-                prefer_futsal = 1
+        prefer_button[4].setOnClickListener {
+            if(prefer_button[4].isChecked == true) {
+                prefer_button[4].setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke));
+                prefer_button_state[4] = 1
             }
             else
             {
-                binding.buttonFutsal.setBackgroundColor(Color.parseColor("#FFFFFF"))
-                prefer_futsal = 0
+                prefer_button[4].setBackgroundColor(Color.parseColor("#FFFFFF"))
+                prefer_button_state[4] = 0
             }
         }
 
@@ -190,4 +205,6 @@ class SignupActivity : AppCompatActivity() {
             finish()
         }
     }
+
+
 }
