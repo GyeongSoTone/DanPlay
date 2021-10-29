@@ -1,13 +1,11 @@
 package com.gyeongsotone.danplay
 
-import android.content.Context
+
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.MotionEvent
-import android.view.View
 import android.widget.Toast
 import android.widget.ToggleButton
 import androidx.core.content.ContextCompat
@@ -16,21 +14,23 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.gyeongsotone.danplay.databinding.ActivityLoginBinding
 import com.gyeongsotone.danplay.databinding.ActivitySignupBinding
 import com.gyeongsotone.danplay.model.UserDTO
+import android.view.View
+import android.widget.RadioGroup
 
 
-class SignupActivity : AppCompatActivity() {
+class SignupActivity : AppCompatActivity(), View.OnClickListener {
 
     private var mBinding: ActivitySignupBinding? = null
     private val binding get() = mBinding!!
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
+    private var user_sex : Int = -1
 
     private var prefer_button : ArrayList<ToggleButton> = ArrayList()
     // preference 상태 저장하는 배열 (테니스, 축구, 야구, 족구 풋살 순)
-    private var prefer_button_state = Array<Int>(5,{0})
+    private var prefer_button_state : ArrayList<Int> = ArrayList()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,97 +41,58 @@ class SignupActivity : AppCompatActivity() {
         database = Firebase.database.reference
         setContentView(binding.root)
 
+        binding.userSex.setOnCheckedChangeListener(CheckboxListener())
 
-        prefer_button[0] = binding.buttonTennis
-        prefer_button[1] = binding.buttonSoccer
-        prefer_button[2] = binding.buttonBasketball
-        prefer_button[3] = binding.buttonJokgoo
-        prefer_button[4] = binding.buttonFutsal
+        prefer_button.add(binding.buttonTennis)
+        prefer_button.add(binding.buttonSoccer)
+        prefer_button.add(binding.buttonBasketball)
+        prefer_button.add(binding.buttonJokgoo)
+        prefer_button.add(binding.buttonFutsal)
 
-        /*for (i in 0 until 4){
-            prefer_button[i].setOnClickListener{
-                if(prefer_button[i].isChecked == true) {
-                    prefer_button_state[i] = 1
-                    prefer_button[i].setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke));
-                } else {
-                    prefer_button_state[i] = 0
-                    prefer_button[i].setBackgroundColor(Color.parseColor("#FFFFFF"))
-                }
-            }
-
-        }*/
-
-        prefer_button[0].setOnClickListener {
-            if(prefer_button[0].isChecked == true) {
-                prefer_button[0].setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke));
-                prefer_button_state[0] = 1
-
-            }
-            else
-            {
-                prefer_button[0].setBackgroundColor(Color.parseColor("#FFFFFF"))
-                prefer_button_state[0] = 0
-            }
+        for (i in 0 until prefer_button.size-1 step (1)) {
+            prefer_button_state.add(0)
         }
 
-        prefer_button[1].setOnClickListener {
-            if(prefer_button[1].isChecked == true) {
-                prefer_button[1].setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke));
-                prefer_button_state[1] = 1
-
-            }
-            else
-            {
-                prefer_button[1].setBackgroundColor(Color.parseColor("#FFFFFF"))
-                prefer_button_state[1] = 0
-            }
+        for (i in 0 until prefer_button.size-1 step (1)) {
+            prefer_button[i].setOnClickListener(this)
         }
 
-        prefer_button[2].setOnClickListener {
-            if(prefer_button[2].isChecked == true) {
-                prefer_button[2].setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke));
-                prefer_button_state[2] = 1
-            }
-            else
-            {
-                prefer_button[2].setBackgroundColor(Color.parseColor("#FFFFFF"))
-                prefer_button_state[2] = 0
-            }
-        }
 
-        prefer_button[3].setOnClickListener {
-            if(prefer_button[3].isChecked == true) {
-                prefer_button[3].setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke));
-                prefer_button_state[3] = 1
-            }
-            else
-            {
-                prefer_button[3].setBackgroundColor(Color.parseColor("#FFFFFF"))
-                prefer_button_state[3] = 0
-            }
-        }
 
-        prefer_button[4].setOnClickListener {
-            if(prefer_button[4].isChecked == true) {
-                prefer_button[4].setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke));
-                prefer_button_state[4] = 1
-            }
-            else
-            {
-                prefer_button[4].setBackgroundColor(Color.parseColor("#FFFFFF"))
-                prefer_button_state[4] = 0
-            }
-        }
+
 
         binding.buttonSignUp.setOnClickListener{
             signup()
         }
+    }
 
+    override fun onClick(v : View?) {
+        for (i in 0 until prefer_button.size-1 step (1)){
+            if(prefer_button[i].isChecked == true) {
+                prefer_button_state.set(i,1)
+                prefer_button[i].setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke))
+            } else {
+                prefer_button_state.set(i,0)
+                prefer_button[i].setBackgroundColor(Color.parseColor("#FFFFFF"))
+                }
+            }
+        }
 
+    inner class CheckboxListener : RadioGroup.OnCheckedChangeListener{
+        override fun onCheckedChanged(group: RadioGroup?, checkdId: Int) {
+            when(group?.id){
+                R.id.user_sex ->
+                    when(checkdId) {
+                        R.id.checkbox_male -> user_sex = 0
+                        R.id.checkbox_female -> user_sex = 1
+                    }
+            }
+        }
 
     }
 
-    fun signup() {
+
+    private fun signup() {
         var userEmail = binding.emailEdittext.text.toString()
         var userPwd = binding.passwordEdittext.text.toString()
         var pwdCheck = binding.passwordCheckEdittext.text.toString()
@@ -159,7 +120,7 @@ class SignupActivity : AppCompatActivity() {
                     task ->
                 if (task.isSuccessful) {
                     // db에 저장
-                    setUserData(task.result?.user, userInfo)
+                    //setUserData(task.result?.user, userInfo)
                     moveLoginPage(task.result?.user)
                 } else {
                     //if you have account move to login page
@@ -179,7 +140,7 @@ class SignupActivity : AppCompatActivity() {
         }
     }
 
-    fun setUserData(user: FirebaseUser?, userInfo: Array<String>) {
+    private fun setUserData(user: FirebaseUser?, userInfo: Array<String>) {
         var UserDTO = UserDTO()
 
         // uid, userId, name, time db에 저장
@@ -197,7 +158,7 @@ class SignupActivity : AppCompatActivity() {
 
         }
     }
-    fun moveLoginPage(user: FirebaseUser?) {
+    private fun moveLoginPage(user: FirebaseUser?) {
         if (user != null) {
             Toast.makeText(this, "회원가입에 성공했습니다.", Toast.LENGTH_LONG).show()
             // 다음 페이지로 넘어가는 Intent
@@ -205,6 +166,4 @@ class SignupActivity : AppCompatActivity() {
             finish()
         }
     }
-
-
 }
