@@ -26,11 +26,15 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
     private val binding get() = mBinding!!
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
-    private var user_sex : Int = -1
+    private var user_sex : String = ""
 
     private var prefer_button : ArrayList<ToggleButton> = ArrayList()
     // preference 상태 저장하는 배열 (테니스, 축구, 야구, 족구 풋살 순)
+    private var sports_list : ArrayList<String> = ArrayList()
+    private var user_preference : ArrayList<String> = ArrayList()
     private var prefer_button_state : ArrayList<Int> = ArrayList()
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,11 +46,18 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
 
         binding.userSex.setOnCheckedChangeListener(CheckboxListener())
 
+        sports_list.add("Tennis")
+        sports_list.add("Soccer")
+        sports_list.add("Basketball")
+        sports_list.add("Jokgoo")
+        sports_list.add("Futsal")
+
         prefer_button.add(binding.buttonTennis)
         prefer_button.add(binding.buttonSoccer)
         prefer_button.add(binding.buttonBasketball)
         prefer_button.add(binding.buttonJokgoo)
         prefer_button.add(binding.buttonFutsal)
+
 
         for (i in 0 until prefer_button.size-1 step (1)) {
             prefer_button_state.add(0)
@@ -56,10 +67,6 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
             prefer_button[i].setOnClickListener(this)
         }
 
-
-
-
-
         binding.buttonSignUp.setOnClickListener{
             signup()
         }
@@ -68,28 +75,29 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v : View?) {
         for (i in 0 until prefer_button.size-1 step (1)){
             if(prefer_button[i].isChecked == true) {
-                prefer_button_state.set(i,1)
+                prefer_button_state.set(i, 1)
                 prefer_button[i].setBackground(ContextCompat.getDrawable(this, R.drawable.btn_event_stroke))
-            } else {
-                prefer_button_state.set(i,0)
+            }
+            else
+            {
+                prefer_button_state.set(i, 0)
                 prefer_button[i].setBackgroundColor(Color.parseColor("#FFFFFF"))
-                }
             }
         }
+    }
 
     inner class CheckboxListener : RadioGroup.OnCheckedChangeListener{
         override fun onCheckedChanged(group: RadioGroup?, checkdId: Int) {
             when(group?.id){
                 R.id.user_sex ->
                     when(checkdId) {
-                        R.id.checkbox_male -> user_sex = 0
-                        R.id.checkbox_female -> user_sex = 1
+                        R.id.checkbox_male -> user_sex = "남성"
+                        R.id.checkbox_female -> user_sex = "여성"
                     }
             }
         }
 
     }
-
 
     private fun signup() {
         var userEmail = binding.emailEdittext.text.toString()
@@ -119,7 +127,10 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
                     task ->
                 if (task.isSuccessful) {
                     // db에 저장
-                    //setUserData(task.result?.user, userInfo)
+
+                    setUserData(task.result?.user, userInfo)
+
+
                     moveLoginPage(task.result?.user)
                 } else {
                     //if you have account move to login page
@@ -150,10 +161,23 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
             // Insert birth
             UserDTO.birth = userInfo[1]
 
+            UserDTO.sex = user_sex
+
             // Insert timeStamp
             //UserDTO.timestamp = System.currentTimeMillis()
 
+            UserDTO.sex = user_sex
+
+            for (i in 0 until prefer_button.size-1 step (1)) {
+                if(prefer_button_state[i] == 1)
+                   user_preference.add(sports_list[i])
+            }
+
+            UserDTO.preference = user_preference
+
             database.child("user").child(user.uid).setValue(UserDTO)
+
+
 
         }
     }
@@ -164,5 +188,10 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
             startActivity(Intent(this,LoginActivity::class.java))
             finish()
         }
+    }
+
+    private fun getPreference(){
+
+
     }
 }
