@@ -107,7 +107,10 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
 
 
         // 입력 칸이 비어있다면 리턴
-        if (TextUtils.isEmpty(userEmail) or TextUtils.isEmpty(userPwd) or TextUtils.isEmpty(userName) or TextUtils.isEmpty(userBirth)) {
+        if (TextUtils.isEmpty(userEmail) or TextUtils.isEmpty(userPwd) or TextUtils.isEmpty(userName) or TextUtils.isEmpty(
+                userBirth
+            )
+        ) {
             Toast.makeText(this, "정보를 바르게 입력해주세요", Toast.LENGTH_LONG).show()
             return
         }
@@ -115,6 +118,12 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
             Toast.makeText(this, "비밀번호와 비밀번호 재확인이 일치하지 않습니다.", Toast.LENGTH_LONG).show()
             return
         }
+
+        if (user_sex.equals(-1)){
+            Toast.makeText(this, "성별을 선택해주세요.", Toast.LENGTH_LONG).show()
+            return
+        }
+
 
         // DKU 계정인지 확인
         var emailArr = userEmail.split("@")
@@ -168,12 +177,13 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
 
             for (i in 0 until prefer_button.size step (1)) {
                 if(prefer_button_state[i] == 1)
-                   user_preference.add(sports_list[i])
+                    user_preference.add(sports_list[i])
             }
 
             UserDTO.preference = user_preference
 
             database.child("user").child(user.uid).setValue(UserDTO)
+
 
 
 
@@ -186,10 +196,5 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
             startActivity(Intent(this,LoginActivity::class.java))
             finish()
         }
-    }
-
-    private fun getPreference(){
-
-
     }
 }
