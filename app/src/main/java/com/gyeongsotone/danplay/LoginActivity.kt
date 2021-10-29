@@ -66,7 +66,8 @@ class LoginActivity : AppCompatActivity() {
                     moveMainPage(task.result?.user)
                 } else {
                     //Show the error message
-                    Toast.makeText(this, task.exception?.message, Toast.LENGTH_LONG).show()
+                    binding.loginFail.setText("아이디와 비밀번호를 확인해주세요")
+                    binding.loginFail.visibility = View.VISIBLE
                 }
             }
     }

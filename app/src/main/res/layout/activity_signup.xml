@@ -76,6 +76,19 @@
 
                     />
             </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:layout_marginTop="-5dp"
+                android:id="@+id/id_fail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:paddingLeft="25dp"
+                android:text="@string/signup_id_fail"
+                android:textColor="@color/red"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                />
         </LinearLayout>
 
             <LinearLayout
@@ -116,6 +129,20 @@
 
                         />
                 </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:layout_marginTop="-5dp"
+                    android:id="@+id/sign_up_password_fail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:paddingLeft="25dp"
+                    android:text="@string/signup_password_fail"
+                    android:textColor="@color/red"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="invisible"
+                    />
+
             </LinearLayout>
 
             <LinearLayout
@@ -154,6 +181,19 @@
                         android:textStyle="bold"
                         />
                 </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:layout_marginTop="-5dp"
+                    android:id="@+id/signup_password_check_fail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:paddingLeft="25dp"
+                    android:text="@string/signup_password_check_fail"
+                    android:textColor="@color/red"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="invisible"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -193,6 +233,19 @@
 
                         />
                 </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:layout_marginTop="-5dp"
+                    android:id="@+id/signup_name_fail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:paddingLeft="25dp"
+                    android:text="@string/signup_name_fail"
+                    android:textColor="@color/red"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="invisible"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -232,6 +285,19 @@
 
                         />
                 </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:layout_marginTop="-5dp"
+                    android:id="@+id/signup_birth_fail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:paddingLeft="25dp"
+                    android:text="@string/signup_birth_fail"
+                    android:textColor="@color/red"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="invisible"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -292,6 +358,18 @@
 
 
                 </LinearLayout>
+                <TextView
+                    android:id="@+id/signup_sex_fail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:paddingLeft="25dp"
+                    android:text="@string/signup_sex_fail"
+                    android:textColor="@color/red"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="invisible"
+                    />
 
             </LinearLayout>
 

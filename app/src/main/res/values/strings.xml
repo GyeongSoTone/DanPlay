@@ -11,4 +11,11 @@
     <string name="login_fail_msg">아이디 또는 비밀번호가 일치하지 않습니다.</string>
     <string name="login_forget_msg"><u>아이디 또는 비밀번호를 잊으셨나요?</u></string>
     <string name="join"><u>아직 회원이 아니신가요?</u></string>
+    <string name="signup_id_fail">단국대 이메일을 입력해주세요.</string>
+    <string name="signup_password_fail">영문, 숫자 6자 이상의 비밀번호를 입력해주세요.</string>
+    <string name="signup_password_check_fail">영문, 숫자 6자 이상의 비밀번호를 입력해주세요.</string>
+    <string name="signup_sex_fail">성별을 선택해주세요.</string>
+    <string name="signup_name_fail">성함을 입력해주세요.</string>
+    <string name="signup_birth_fail">올바른 형식의 날짜를 입력해주세요.</string>
+
 </resources>

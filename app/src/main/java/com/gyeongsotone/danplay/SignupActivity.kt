@@ -46,11 +46,11 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
 
         binding.userSex.setOnCheckedChangeListener(CheckboxListener())
 
-        sports_list.add("Tennis")
-        sports_list.add("Soccer")
-        sports_list.add("Basketball")
-        sports_list.add("Jokgoo")
-        sports_list.add("Futsal")
+        sports_list.add("테니스")
+        sports_list.add("축구")
+        sports_list.add("야구")
+        sports_list.add("족구")
+        sports_list.add("풋살")
 
         prefer_button.add(binding.buttonTennis)
         prefer_button.add(binding.buttonSoccer)
@@ -107,20 +107,33 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
 
 
         // 입력 칸이 비어있다면 리턴
-        if (TextUtils.isEmpty(userEmail) or TextUtils.isEmpty(userPwd) or TextUtils.isEmpty(userName) or TextUtils.isEmpty(
-                userBirth
-            )
-        ) {
-            Toast.makeText(this, "정보를 바르게 입력해주세요", Toast.LENGTH_LONG).show()
-            return
-        }
-        if (!TextUtils.equals(userPwd, pwdCheck)) {
-            Toast.makeText(this, "비밀번호와 비밀번호 재확인이 일치하지 않습니다.", Toast.LENGTH_LONG).show()
-            return
+
+        if (TextUtils.isEmpty(userPwd)) {
+            binding.signUpPasswordFail.setText("비밀번호를 입력해주세요.")
+            binding.signUpPasswordFail.visibility = View.VISIBLE
         }
 
-        if (user_sex.equals(-1)){
-            Toast.makeText(this, "성별을 선택해주세요.", Toast.LENGTH_LONG).show()
+        if (!TextUtils.equals(userPwd, pwdCheck)) {
+            binding.signupPasswordCheckFail.visibility = View.VISIBLE
+        }
+
+
+        if (TextUtils.isEmpty(userName))  {
+            binding.signupNameFail.visibility = View.VISIBLE
+        }
+
+
+        if (TextUtils.isEmpty(userBirth)) {
+            binding.signupBirthFail.visibility = View.VISIBLE
+        }
+
+        if (user_sex.equals("")){
+            binding.signupSexFail.visibility = View.VISIBLE
+        }
+
+        if (TextUtils.isEmpty(userEmail)) {
+            binding.idFail.setText("아이디를 입력해주세요.")
+            binding.idFail.visibility = View.VISIBLE
             return
         }
 
@@ -136,13 +149,12 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
                     // db에 저장
 
                     setUserData(task.result?.user, userInfo)
-
-
                     moveLoginPage(task.result?.user)
                 } else {
                     //if you have account move to login page
                     if (task.exception?.message.equals("The email address is already in use by another account.")) {
-                        Toast.makeText(this, "이미 존재하는 이메일입니다.", Toast.LENGTH_LONG).show()
+                        binding.idFail.setText("이미 존재하는 이메일입니다.")
+                        binding.idFail.visibility = View.VISIBLE
                     }
                     //Show the error message
                     else {
@@ -152,7 +164,8 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
         else {
-            Toast.makeText(this, "알맞은 형식의 이메일이 아닙니다.", Toast.LENGTH_LONG).show()
+            binding.idFail.setText("단국대 이메일을 입력해주세요.")
+            binding.idFail.visibility = View.VISIBLE
             return
         }
     }
