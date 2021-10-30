@@ -34,7 +34,9 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
     private var user_preference : ArrayList<String> = ArrayList()
     private var prefer_button_state : ArrayList<Int> = ArrayList()
 
+    private var signup_id_state : String = ""
 
+    private var wrong_input : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +45,16 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
         auth = FirebaseAuth.getInstance()
         database = Firebase.database.reference
         setContentView(binding.root)
+
+        if (signup_id_state == "duplicate"){
+            binding.idFail.setText("이미 동일한 ID가 존재합니다.")
+            binding.idFail.visibility = View.VISIBLE
+        }else if (signup_id_state == "wrong_format"){
+            binding.idFail.setText("단국대 이메일을 입력해주세요.")
+            binding.idFail.visibility = View.VISIBLE
+        }
+        else
+            binding.idFail.visibility = View.INVISIBLE
 
         binding.userSex.setOnCheckedChangeListener(CheckboxListener())
 
@@ -109,33 +121,74 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
         // 입력 칸이 비어있다면 리턴
 
         if (TextUtils.isEmpty(userPwd)) {
+            wrong_input = 1
             binding.signUpPasswordFail.setText("비밀번호를 입력해주세요.")
             binding.signUpPasswordFail.visibility = View.VISIBLE
+            binding.signupPasswordCheckFail.setText("비밀번호를 입력해주세요.")
+            binding.signupPasswordCheckFail.visibility = View.VISIBLE
+        }else{
+            binding.signUpPasswordFail.visibility = View.INVISIBLE
+            binding.signupPasswordCheckFail.visibility = View.INVISIBLE
         }
 
+
         if (!TextUtils.equals(userPwd, pwdCheck)) {
+            wrong_input = 1
             binding.signupPasswordCheckFail.visibility = View.VISIBLE
+        }else{
+            binding.signupPasswordCheckFail.visibility = View.INVISIBLE
         }
 
 
         if (TextUtils.isEmpty(userName))  {
+            wrong_input = 1
             binding.signupNameFail.visibility = View.VISIBLE
+        }else{
+            binding.signupNameFail.visibility = View.INVISIBLE
         }
+
 
 
         if (TextUtils.isEmpty(userBirth)) {
+            wrong_input = 1
             binding.signupBirthFail.visibility = View.VISIBLE
-        }
+        }else{
+            binding.signupBirthFail.visibility = View.INVISIBLE
 
-        if (user_sex.equals("")){
-            binding.signupSexFail.visibility = View.VISIBLE
         }
 
         if (TextUtils.isEmpty(userEmail)) {
+            wrong_input = 1
             binding.idFail.setText("아이디를 입력해주세요.")
             binding.idFail.visibility = View.VISIBLE
+        }else if (signup_id_state == "duplicate"){
+            wrong_input = 1
+                binding.idFail.setText("이미 동일한 ID가 존재합니다.")
+                binding.idFail.visibility = View.VISIBLE
+            binding.signUpLogo.setText("중복")
+        }else if (signup_id_state == "wrong_format"){
+            wrong_input = 1
+            binding.idFail.setText("단국대 이메일을 입력해주세요.")
+            binding.idFail.visibility = View.VISIBLE
+        }
+        else
+            binding.idFail.visibility = View.INVISIBLE
+
+
+        if (user_sex.equals("")){
+            wrong_input = 1
+            binding.signupSexFail.visibility = View.VISIBLE
+
+        }else{
+            binding.signupSexFail.visibility = View.INVISIBLE
+        }
+
+        if (wrong_input.equals(1)){
             return
         }
+
+
+
 
 
         // DKU 계정인지 확인
@@ -147,25 +200,16 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
                     task ->
                 if (task.isSuccessful) {
                     // db에 저장
-
                     setUserData(task.result?.user, userInfo)
                     moveLoginPage(task.result?.user)
-                } else {
-                    //if you have account move to login page
-                    if (task.exception?.message.equals("The email address is already in use by another account.")) {
-                        binding.idFail.setText("이미 존재하는 이메일입니다.")
-                        binding.idFail.visibility = View.VISIBLE
-                    }
-                    //Show the error message
-                    else {
-                        Toast.makeText(this, task.exception?.message, Toast.LENGTH_LONG).show()
-                    }
+                }
+                else {
+                    signup_id_state = "duplicate"
                 }
             }
         }
         else {
-            binding.idFail.setText("단국대 이메일을 입력해주세요.")
-            binding.idFail.visibility = View.VISIBLE
+            signup_id_state = "wrong_format"
             return
         }
     }

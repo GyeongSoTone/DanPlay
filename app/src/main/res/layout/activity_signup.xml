@@ -27,6 +27,7 @@
             >
 
             <TextView
+                android:id="@+id/sign_up_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -83,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="bottom"
                 android:paddingLeft="25dp"
-                android:text="@string/signup_id_fail"
+                android:text="@string/signup_id_duplicate"
                 android:textColor="@color/red"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -188,7 +189,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="bottom"
                     android:paddingLeft="25dp"
-                    android:text="@string/signup_password_check_fail"
+                    android:text = "@string/signup_password_check_fail"
                     android:textColor="@color/red"
                     android:textSize="14sp"
                     android:textStyle="bold"
