@@ -13,70 +13,70 @@
 
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:weightSum="100"
-        >
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
+            android:weightSum="100"
             >
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="30dp"
-                android:layout_weight="0.0001"
-                android:text="회원가입"
-                android:textColor="@color/black"
-                android:textSize="32sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+                android:orientation="vertical"
+                >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_weight="0.4"
-            android:layout_marginTop="20dp"
-            android:gravity="left|center"
-            android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_weight="0.0001"
+                    android:text="회원가입"
+                    android:textColor="@color/black"
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/text_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="bottom"
-                android:paddingLeft="30dp"
-                android:text="아이디"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_weight="0.4"
+                android:layout_marginTop="20dp"
+                android:gravity="left|center"
+                android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="350dp"
-                android:layout_height="55dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="0dp"
-                android:layout_marginRight="20dp">
+                <TextView
+                    android:id="@+id/text_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:paddingLeft="30dp"
+                    android:text="아이디"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/email_edittext"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="350dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/color_round"
-                    android:hint="@string/email_example"
-                    android:paddingLeft="10dp"
-                    android:textSize="18dp"
-                    android:textStyle="bold"
+                    android:layout_height="55dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginRight="20dp">
 
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
+                    <EditText
+                        android:id="@+id/email_edittext"
+                        android:layout_width="350dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/color_round"
+                        android:hint="@string/email_example"
+                        android:paddingLeft="10dp"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -252,42 +252,46 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-              <LinearLayout
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:orientation="horizontal"
-                  android:paddingLeft="20dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="20dp">
 
 
-                  <RadioGroup
-                      android:paddingTop="10dp"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:orientation="horizontal"
-                      android:theme="@style/CustomRadioButton"
-                      >
-                  <RadioButton
-                      android:id="@+id/checkbox_male"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:text="남자"
-                      android:textSize="14sp"
-                      android:textStyle="bold"
-                      android:paddingRight="20dp"
+                    <RadioGroup
+                        android:id="@+id/user_sex"
+                        android:paddingTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:theme="@style/CustomRadioButton"
+                        >
+                        <RadioButton
+                            android:id="@+id/checkbox_male"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="남자"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:paddingRight="20dp"
 
-                      ></RadioButton>
+                            ></RadioButton>
 
-                  <RadioButton
+                        <RadioButton
 
-                      android:id="@+id/checkbox_female"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:text="여자"
-                      android:textSize="14sp"
-                      android:textStyle="bold"
-                      ></RadioButton>
-                  </RadioGroup>
-              </LinearLayout>
+                            android:id="@+id/checkbox_female"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="여자"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            ></RadioButton>
+                    </RadioGroup>
+
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -314,52 +318,58 @@
                     android:layout_height="70dp"
                     android:gravity="center">
 
-                    <Button
+                    <ToggleButton
                         android:id="@+id/button_tennis"
                         android:layout_width="65dp"
                         android:layout_height="30dp"
                         android:background="@drawable/btn_event"
-                        android:text="테니스"
+                        android:textOn="테니스"
+                        android:textOff="테니스"
                         android:textColor="@color/gray"
                         android:textStyle="bold"
-                        android:layout_margin="5dp"/>
+                        android:layout_margin="5dp"
+                        />
 
-                    <Button
+                    <ToggleButton
                         android:id="@+id/button_soccer"
                         android:layout_width="60dp"
                         android:layout_height="30dp"
                         android:background="@drawable/btn_event"
-                        android:text="축구"
+                        android:textOn="축구"
+                        android:textOff="축구"
                         android:textColor="@color/gray"
                         android:textStyle="bold"
                         android:layout_margin="5dp"/>
 
-                    <Button
+                    <ToggleButton
                         android:id="@+id/button_basketball"
                         android:layout_width="60dp"
                         android:layout_height="30dp"
                         android:background="@drawable/btn_event"
-                        android:text="농구"
+                        android:textOn="농구"
+                        android:textOff="농구"
                         android:textColor="@color/gray"
                         android:textStyle="bold"
                         android:layout_margin="5dp"/>
 
-                    <Button
+                    <ToggleButton
                         android:id="@+id/button_jokgoo"
                         android:layout_width="60dp"
                         android:layout_height="30dp"
                         android:background="@drawable/btn_event"
-                        android:text="족구"
+                        android:textOn="족구"
+                        android:textOff="족구"
                         android:textColor="@color/gray"
                         android:textStyle="bold"
                         android:layout_margin="5dp"/>
 
-                    <Button
+                    <ToggleButton
                         android:id="@+id/button_futsal"
                         android:layout_width="60dp"
                         android:layout_height="30dp"
                         android:background="@drawable/btn_event"
-                        android:text="풋살"
+                        android:textOn="풋살"
+                        android:textOff="풋살"
                         android:textColor="@color/gray"
                         android:textStyle="bold"
                         android:layout_margin="5dp"/>

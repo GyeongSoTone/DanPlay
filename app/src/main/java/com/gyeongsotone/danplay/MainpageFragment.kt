@@ -29,26 +29,50 @@ class MainpageFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         var current_user = auth.currentUser!!
         var name = viewGroup!!.findViewById<View>(R.id.text_name) as TextView
+        var text_sports1 = viewGroup!!.findViewById<View>(R.id.text_sports1) as TextView
+        var text_sports2 = viewGroup!!.findViewById<View>(R.id.text_sports2) as TextView
+        var text_sports3 = viewGroup!!.findViewById<View>(R.id.text_sports3) as TextView
+        var text_sports4 = viewGroup!!.findViewById<View>(R.id.text_sports4) as TextView
+        var btn_sports1 = viewGroup!!.findViewById<View>(R.id.btn_sports1) as ImageButton
+        var btn_sports2 = viewGroup!!.findViewById<View>(R.id.btn_sports2) as ImageButton
+        var btn_sports3 = viewGroup!!.findViewById<View>(R.id.btn_sports3) as ImageButton
+        var btn_sports4 = viewGroup!!.findViewById<View>(R.id.btn_sports4) as ImageButton
 
         database.child("user").child(current_user.uid).get().addOnSuccessListener {
-            //Toast.makeText(this, "${it.child("name").value}님 환영합니다!", Toast.LENGTH_LONG).show()
             name.setText("${it.child("name").value}")
-        }.addOnFailureListener{
-            //Toast.makeText(this, "실패~", Toast.LENGTH_LONG).show()
-        }
+            text_sports1.setText("${it.child("preference").child("0").value}")
+            text_sports2.setText("${it.child("preference").child("1").value}")
+            text_sports3.setText("${it.child("preference").child("2").value}")
+            text_sports4.setText("${it.child("preference").child("3").value}")
 
-        var btn_sports1 = viewGroup!!.findViewById<View>(R.id.button_sports1) as ImageButton
+            setImage(text_sports1, btn_sports1)
+            setImage(text_sports2, btn_sports2)
+            setImage(text_sports3, btn_sports3)
+            setImage(text_sports4, btn_sports4)
+        }.addOnFailureListener{
+            Toast.makeText(getActivity(), "DB 읽기 실패", Toast.LENGTH_LONG).show()
+        }
+        return viewGroup
+    }
+
+    fun setImage(text_sports: TextView, btn_sports: ImageButton){
+        when(text_sports.getText()){
+            "테니스" -> btn_sports.setImageResource(R.drawable.tennis)
+            "축구" -> btn_sports.setImageResource(R.drawable.soccer)
+            "농구" -> btn_sports.setImageResource(R.drawable.basket)
+            "족구" -> btn_sports.setImageResource(R.drawable.jokgoo)
+            "풋살" -> btn_sports.setImageResource(R.drawable.logo_danplay)
+            else -> null
+        }
+    }
+}
+
+/*
         btn_sports1.setOnClickListener {
             val intent = Intent(requireActivity().applicationContext, SignupActivity::class.java)
             startActivity(intent)
         }
-
-        var btn_sports2 = viewGroup!!.findViewById<View>(R.id.button_sports2) as ImageButton
         btn_sports2.setOnClickListener {
-            val intent = Intent(requireActivity().applicationContext, LoginActivity::class.java)
-            startActivity(intent)
+           btn_sports2.setImageResource(R.drawable.soccer)
         }
-
-        return viewGroup
-    }
-}
+ */
