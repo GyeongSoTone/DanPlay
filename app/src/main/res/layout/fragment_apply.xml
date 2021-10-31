@@ -140,6 +140,7 @@
             android:orientation="vertical">
 
             <EditText
+                android:id="@+id/edittext_content"
                 android:layout_width="330dp"
                 android:layout_height="180dp"
                 android:background="@drawable/edit"
@@ -147,7 +148,7 @@
                 android:textColorHint="@color/gray" />
 
             <Button
-                android:id="@+id/btn_filterapply"
+                android:id="@+id/btn_apply"
                 android:layout_width="350dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="30dp"

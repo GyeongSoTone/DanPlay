@@ -7,10 +7,7 @@ import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.CalendarView
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import android.widget.Toast.LENGTH_SHORT
 import androidx.fragment.app.Fragment
 import com.google.firebase.database.DatabaseReference
@@ -28,7 +25,8 @@ class ApplyFragment : Fragment() {
     private var g_sport: String? = null
     private var g_people: Int? = null
     private var g_place: String? = null
-
+    private var g_time: String? = null
+    private var g_content: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +39,9 @@ class ApplyFragment : Fragment() {
         var btn_people = viewGroup!!.findViewById<View>(R.id.btn_people) as Button
         var btn_place = viewGroup!!.findViewById<View>(R.id.btn_where) as Button
         var btn_time = viewGroup!!.findViewById<View>(R.id.btn_time) as Button
+        var edittext_content = viewGroup!!.findViewById<View>(R.id.edittext_content) as EditText
+
+        var btn_apply = viewGroup!!.findViewById<View>(R.id.btn_apply) as Button
 
         val list = arrayOf<String>()
 
@@ -49,7 +50,7 @@ class ApplyFragment : Fragment() {
             val sports = arrayOf("테니스", "축구", "농구", "족구", "풋살")
             var selectedItem: String? = null
 
-            val builder = AlertDialog.Builder(getActivity())
+            val builder = AlertDialog.Builder(activity)
                 .setTitle("종목을 선택하세요")
                 .setSingleChoiceItems(sports, -1) { dialog, which ->
                     selectedItem = sports[which]
@@ -68,7 +69,7 @@ class ApplyFragment : Fragment() {
                 "13", "14", "15", "16", "17", "18", "19", "20", "21", "22")
             var selectedItem: String? = null
 
-            val builder = AlertDialog.Builder(getActivity())
+            val builder = AlertDialog.Builder(activity)
                 .setTitle("인원수를 선택하세요")
                 .setSingleChoiceItems(people, -1) { dialog, which ->
                     selectedItem = people[which]
@@ -87,7 +88,7 @@ class ApplyFragment : Fragment() {
                 "풋살경기장", "혜당관(학생극장 2층로비)", "혜당관(학생회관)212(학생극장)")
             var selectedItem: String? = null
 
-            val builder = AlertDialog.Builder(getActivity())
+            val builder = AlertDialog.Builder(activity)
                 .setTitle("장소를 선택하세요")
                 .setSingleChoiceItems(place, -1) { dialog, which ->
                     selectedItem = place[which]
@@ -116,19 +117,19 @@ class ApplyFragment : Fragment() {
                 var listener2 = TimePickerDialog.OnTimeSetListener { timePicker, i, i2 ->
                     hour = i
                     minute = i2
+                    // 시간 원하는 단위로 합치기
                     btn_time.text = "${year}년 ${month}월 ${day}일 ${i}시 ${i2}분"
                 }
-                var picker2 = TimePickerDialog(getActivity(), listener2, hour, minute, false ) // true하면 24시간 제
+                var picker2 = TimePickerDialog(activity, listener2, hour, minute, false ) // true하면 24시간 제
                 picker2.show()
             }
-
-
             var picker1 = getActivity()?.let { it1 -> DatePickerDialog(it1, listener1, year, month, day) }
             picker1!!.show()
+        }
 
-
-
-
+        btn_apply.setOnClickListener {
+            g_content = edittext_content.text.toString()
+            Toast.makeText(activity,g_content.toString(), Toast.LENGTH_SHORT).show()
         }
         return viewGroup
     }
