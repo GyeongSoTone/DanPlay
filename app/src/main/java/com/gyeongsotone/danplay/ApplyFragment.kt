@@ -10,23 +10,30 @@ import android.view.View
 import android.widget.*
 import android.widget.Toast.LENGTH_SHORT
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.gyeongsotone.danplay.databinding.ActivitySignupBinding
 import com.gyeongsotone.danplay.databinding.FragmentApplyBinding
 import com.gyeongsotone.danplay.model.MatchDTO
+import java.time.LocalDate
+import java.time.LocalDate.*
 import java.util.*
 
 
 class ApplyFragment : Fragment() {
     var viewGroup: ViewGroup? = null
-    private lateinit var database: DatabaseReference
+
     private var g_sport: String? = null
     private var g_people: Int? = null
     private var g_place: String? = null
-    private var g_time: String? = null
+    // private var g_time: String? = null
     private var g_content: String? = null
+
+    private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -128,9 +135,31 @@ class ApplyFragment : Fragment() {
         }
 
         btn_apply.setOnClickListener {
+            // content 문자열 저장
             g_content = edittext_content.text.toString()
             Toast.makeText(activity,g_content.toString(), Toast.LENGTH_SHORT).show()
+            //setMatchData(~~!auth@)
         }
+
+
         return viewGroup
+    }
+
+    private fun setMatchData(user: FirebaseUser?) {
+        var MatchDTO = MatchDTO()
+
+        // uid, userId, name, time db에 저장
+        if (user != null) {
+            MatchDTO.matchId = 123
+            MatchDTO.sports = g_sport
+            MatchDTO.totalNum = g_people
+            MatchDTO.currentNum = 1
+            MatchDTO.place = g_place
+            MatchDTO.content = g_content
+            MatchDTO.playTime = "long"
+            MatchDTO.applyTime = 12
+
+            database.child("user").child(user.uid).setValue(MatchDTO)
+        }
     }
 }
