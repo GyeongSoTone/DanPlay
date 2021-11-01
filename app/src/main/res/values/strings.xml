@@ -17,5 +17,5 @@
     <string name="signup_sex_fail">성별을 선택해주세요.</string>
     <string name="signup_name_fail">성함을 입력해주세요.</string>
     <string name="signup_birth_fail">올바른 형식의 날짜를 입력해주세요.</string>
-
+    <string name="signup_prefer_fail">최소 1가지 종목을 골라주세요.</string>
 </resources>

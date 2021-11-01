@@ -133,7 +133,12 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
         if (!TextUtils.equals(userPwd, pwdCheck)) {
             wrong_input = 1
             binding.signupPasswordCheckFail.visibility = View.VISIBLE
-        }else{
+        }else if(TextUtils.isEmpty(pwdCheck)) {
+            wrong_input = 1
+            binding.signupPasswordCheckFail.setText("비밀번호를 입력해주세요.")
+            binding.signupPasswordCheckFail.visibility = View.VISIBLE
+        }
+        else{
             binding.signupPasswordCheckFail.visibility = View.INVISIBLE
         }
 
@@ -153,11 +158,6 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
 
         }
 
-        if (TextUtils.isEmpty(userEmail)) {
-            wrong_input = 1
-            binding.idFail.setText("아이디를 입력해주세요.")
-            binding.idFail.visibility = View.VISIBLE
-        }
 
 
         if (user_sex.equals("")){
@@ -170,15 +170,26 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
 
 
 
+
+        if ((prefer_button_state[0] or prefer_button_state[1] or prefer_button_state[2] or prefer_button_state[3] or prefer_button_state[4]).equals(0)) {
+            wrong_input = 1
+            binding.signupPreferFail.visibility = View.VISIBLE
+
+
+        }else{
+            binding.signupPreferFail.visibility = View.INVISIBLE
+        }
+
         // DKU 계정인지 확인
         var id_format = 0
         var emailArr = userEmail.split("@")
 
-        if (!(TextUtils.isEmpty(userEmail)) and (TextUtils.equals(emailArr[0], userEmail))){
+        if (!userEmail.contains("@")){
             binding.idFail.setText("올바른 양식의 아이디를 입력해주세요.")
             binding.idFail.visibility = View.VISIBLE
             return
         }
+
         if (((emailArr[0].length == 8) and (emailArr[1].equals("dankook.ac.kr")))) {
             id_format = 1
         }
@@ -188,6 +199,12 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
             binding.idFail.visibility = View.VISIBLE
         }
 
+        /*if (TextUtils.isEmpty(userEmail)) {
+            wrong_input = 1
+            binding.idFail.setText("아이디를 입력해주세요.")
+            binding.idFail.visibility = View.VISIBLE
+        }
+*/
         if (wrong_input.equals(1)){
             return
         }
@@ -230,6 +247,7 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
             //UserDTO.timestamp = System.currentTimeMillis()
 
             UserDTO.sex = user_sex
+
 
             for (i in 0 until prefer_button.size step (1)) {
                 if(prefer_button_state[i] == 1)
