@@ -93,6 +93,7 @@
                 android:paddingBottom="5dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
+
         <TextView
             android:id="@+id/login_fail"
             android:layout_width="wrap_content"
@@ -102,7 +103,9 @@
             android:text="@string/login_fail_msg"
             android:textColor="@color/red"
             android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="invisible"
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -114,14 +117,14 @@
         <TextView
             android:id="@+id/login_forget"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingRight="20dp"
+            android:layout_height="match_parent"
             android:paddingLeft="25dp"
+            android:paddingRight="20dp"
             android:text="@string/login_forget_msg"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold"
-            />
+            android:visibility="gone"/>
 
     </LinearLayout>
 
