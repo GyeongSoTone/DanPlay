@@ -3,9 +3,11 @@ package com.gyeongsotone.danplay
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.os.Bundle
+import android.service.autofill.FieldClassification
 import android.view.View
 import android.widget.*
 import android.widget.Toast.LENGTH_SHORT
@@ -51,6 +53,9 @@ class ApplyFragment : Fragment() {
         var btn_apply = viewGroup!!.findViewById<View>(R.id.btn_apply) as Button
 
         val list = arrayOf<String>()
+
+        auth = FirebaseAuth.getInstance()
+        database = Firebase.database.reference
 
         btn_event.setOnClickListener {
             //Toast.makeText(getActivity(), "~", Toast.LENGTH_LONG).show()
@@ -130,7 +135,7 @@ class ApplyFragment : Fragment() {
                 var picker2 = TimePickerDialog(activity, listener2, hour, minute, false ) // true하면 24시간 제
                 picker2.show()
             }
-            var picker1 = getActivity()?.let { it1 -> DatePickerDialog(it1, listener1, year, month, day) }
+            var picker1 = activity?.let { it1 -> DatePickerDialog(it1, listener1, year, month, day) }
             picker1!!.show()
         }
 
@@ -138,28 +143,34 @@ class ApplyFragment : Fragment() {
             // content 문자열 저장
             g_content = edittext_content.text.toString()
             Toast.makeText(activity,g_content.toString(), Toast.LENGTH_SHORT).show()
-            //setMatchData(~~!auth@)
+            setMatchData()
         }
 
 
         return viewGroup
     }
 
-    private fun setMatchData(user: FirebaseUser?) {
+    private fun setMatchData() {
         var MatchDTO = MatchDTO()
 
-        // uid, userId, name, time db에 저장
-        if (user != null) {
-            MatchDTO.matchId = 123
+        //if (user != null) {
+            MatchDTO.matchId = 1010
             MatchDTO.sports = g_sport
             MatchDTO.totalNum = g_people
             MatchDTO.currentNum = 1
             MatchDTO.place = g_place
             MatchDTO.content = g_content
             MatchDTO.playTime = "long"
-            MatchDTO.applyTime = 12
+            MatchDTO.applyTime = "12"
 
-            database.child("user").child(user.uid).setValue(MatchDTO)
+            database.child("match").child(MatchDTO.matchId.toString()).setValue(MatchDTO)
+        //}
+    }
+
+    private fun moveMainPage(user: FirebaseUser?) {
+        if (user != null) {
+            Toast.makeText(activity, "매치 등록 완료되었습니다.", Toast.LENGTH_SHORT).show()
+            // 다음 페이지로 넘어가는 Intent
         }
     }
 }
