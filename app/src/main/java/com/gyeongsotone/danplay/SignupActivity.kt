@@ -46,10 +46,8 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
         database = Firebase.database.reference
         setContentView(binding.root)
 
-        if (signup_id_state == "duplicate"){
-            binding.idFail.setText("이미 동일한 ID가 존재합니다.")
-            binding.idFail.visibility = View.VISIBLE
-        }else if (signup_id_state == "wrong_format"){
+
+        if (signup_id_state == "wrong_format"){
             binding.idFail.setText("단국대 이메일을 입력해주세요.")
             binding.idFail.visibility = View.VISIBLE
         }
@@ -147,8 +145,6 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
             binding.signupNameFail.visibility = View.INVISIBLE
         }
 
-
-
         if (TextUtils.isEmpty(userBirth)) {
             wrong_input = 1
             binding.signupBirthFail.visibility = View.VISIBLE
@@ -161,18 +157,7 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
             wrong_input = 1
             binding.idFail.setText("아이디를 입력해주세요.")
             binding.idFail.visibility = View.VISIBLE
-        }else if (signup_id_state == "duplicate"){
-            wrong_input = 1
-                binding.idFail.setText("이미 동일한 ID가 존재합니다.")
-                binding.idFail.visibility = View.VISIBLE
-            binding.signUpLogo.setText("중복")
-        }else if (signup_id_state == "wrong_format"){
-            wrong_input = 1
-            binding.idFail.setText("단국대 이메일을 입력해주세요.")
-            binding.idFail.visibility = View.VISIBLE
         }
-        else
-            binding.idFail.visibility = View.INVISIBLE
 
 
         if (user_sex.equals("")){
@@ -183,34 +168,48 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
             binding.signupSexFail.visibility = View.INVISIBLE
         }
 
+
+
+        // DKU 계정인지 확인
+        var id_format = 0
+        var emailArr = userEmail.split("@")
+
+        if (!(TextUtils.isEmpty(userEmail)) and (TextUtils.equals(emailArr[0], userEmail))){
+            binding.idFail.setText("올바른 양식의 아이디를 입력해주세요.")
+            binding.idFail.visibility = View.VISIBLE
+            return
+        }
+        if (((emailArr[0].length == 8) and (emailArr[1].equals("dankook.ac.kr")))) {
+            id_format = 1
+        }
+        else {
+            wrong_input=1
+            binding.idFail.setText("올바른 양식의 아이디를 입력해주세요.")
+            binding.idFail.visibility = View.VISIBLE
+        }
+
         if (wrong_input.equals(1)){
             return
         }
 
-
-
-
-
-        // DKU 계정인지 확인
-        var emailArr = userEmail.split("@")
-        if ((emailArr[0].length == 8) and (emailArr[1].equals("dankook.ac.kr"))) {
-
-            // 회원가입한 결과값을 받아오기 위해서 addOnCompleteListener {  }
-            auth?.createUserWithEmailAndPassword(userEmail, userPwd)?.addOnCompleteListener {
-                    task ->
-                if (task.isSuccessful) {
-                    // db에 저장
-                    setUserData(task.result?.user, userInfo)
-                    moveLoginPage(task.result?.user)
+        if (id_format.equals(1)) {
+            auth?.createUserWithEmailAndPassword(userEmail, userPwd)
+                ?.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        // db에 저장
+                        setUserData(task.result?.user, userInfo)
+                        moveLoginPage(task.result?.user)
+                    } else {
+                        //if you have account move to login page
+                        if (task.exception?.message.equals("The email address is already in use by another account.")) {
+                            Toast.makeText(this, "이미 존재하는 ID 입니다.", Toast.LENGTH_LONG).show()
+                        }
+                        //Show the error message
+                        else {
+                            Toast.makeText(this, task.exception?.message, Toast.LENGTH_LONG).show()
+                        }
+                    }
                 }
-                else {
-                    signup_id_state = "duplicate"
-                }
-            }
-        }
-        else {
-            signup_id_state = "wrong_format"
-            return
         }
     }
 
@@ -240,9 +239,6 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
             UserDTO.preference = user_preference
 
             database.child("user").child(user.uid).setValue(UserDTO)
-
-
-
 
         }
     }
