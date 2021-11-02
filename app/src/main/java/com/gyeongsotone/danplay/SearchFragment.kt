@@ -44,6 +44,11 @@ class SearchFragment : Fragment() {
         var title : String
         matchDb.get().addOnSuccessListener {
             for (mId in it.children) {
+                currentNum = it.child(mId.key.toString()).child("currentNum").value.toString()
+                totalNum = it.child(mId.key.toString()).child("totalNum").value.toString()
+                if (totalNum == currentNum) {
+                    continue
+                }
                 sports = it.child(mId.key.toString()).child("sports").value.toString()
                 playTimeDate = it.child(mId.key.toString()).child("playTime").value.toString()
                 if (playTimeDate.split(" ").size == 2) {
@@ -55,8 +60,6 @@ class SearchFragment : Fragment() {
                 }
                 applyTime = it.child(mId.key.toString()).child("applyTime").value.toString()
                 place = it.child(mId.key.toString()).child("place").value.toString()
-                currentNum = it.child(mId.key.toString()).child("currentNum").value.toString()
-                totalNum = it.child(mId.key.toString()).child("totalNum").value.toString()
                 content = it.child(mId.key.toString()).child("content").value.toString()
                 registrant = it.child(mId.key.toString()).child("registrant").value.toString()
                 title = sports.plus(" | ${playDate} | ${playTime} | ${place} | ${currentNum}/${totalNum}")
