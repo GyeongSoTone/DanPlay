@@ -94,11 +94,12 @@
 
         <TextView
             android:id="@+id/text_sports1"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="65dp"
             android:layout_marginBottom="5dp"
             android:text=""
+            android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -107,11 +108,12 @@
 
         <TextView
             android:id="@+id/text_sports2"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="75dp"
+            android:layout_marginEnd="65dp"
             android:layout_marginBottom="5dp"
             android:text=""
+            android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -120,11 +122,12 @@
 
         <TextView
             android:id="@+id/text_sports3"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="75dp"
+            android:layout_marginStart="65dp"
             android:layout_marginBottom="5dp"
             android:text=""
+            android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -133,11 +136,12 @@
 
         <TextView
             android:id="@+id/text_sports4"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="75dp"
+            android:layout_marginEnd="65dp"
             android:layout_marginBottom="5dp"
             android:text=""
+            android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -168,28 +172,27 @@
 
         <TextView
             android:id="@+id/text_name"
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
-            android:text="소 재 헌"
+            android:text=""
             android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/profile"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.507" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/text_myMatch"
-            android:layout_width="wrap_content"
+            android:layout_width="106dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
+            android:layout_marginEnd="60dp"
             android:text="10/05 16:30 풋살\n10/06 05:00 축구"
             android:textColor="#000000"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/text_name"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
