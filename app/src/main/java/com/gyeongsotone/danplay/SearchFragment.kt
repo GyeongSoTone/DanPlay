@@ -7,10 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import kotlin.collections.ArrayList
 
 class SearchFragment : Fragment() {
     var viewGroup: ViewGroup? = null
+    private lateinit var database: DatabaseReference
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -18,37 +22,69 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewGroup = inflater.inflate(R.layout.fragment_search, container, false) as ViewGroup
-        var btnFilter = viewGroup!!.findViewById<View>(R.id.btn_filter) as ImageView
+        val btnFilter = viewGroup!!.findViewById<View>(R.id.btn_filter) as ImageView
         btnFilter.setOnClickListener {
             val intent = Intent(requireActivity().applicationContext, FilterActivity::class.java)
             startActivity(intent)
         }
+        database = Firebase.database.reference
 
+        val matchDb = database.child("match")
         val listItem = arrayListOf<ListViewModel>()
-        listItem.add(ListViewModel("1", "풋살 | 9/1 | 16:00 | 단국대 풋살 경기장 | 5/8", "같이 풋살 하실 분 구합니다. 공은 저희가 가져오겠습니다."))
-        listItem.add(ListViewModel("2", "풋살 | 10/6 | 17:00 | 단국대 풋살 경기장 | 4/8", "피파온라인하다가 그냥 갑자기 요를레히 합니다. 같이 풋살하실 단국 죽전인 여러분! 오늘도 화이팅!피파온라인하다가 그냥 갑자기 요를레히 합니다. 같이 풋살하실 단국 죽전인 여러분! 오늘도 화이팅!피파온라인하다가 그냥 갑자기 요를레히 합니다. 같이 풋살하실 단국 죽전인 여러분! 오늘도 화이팅!"))
-        listItem.add(ListViewModel("3", "농구 | 10/7 | 14:00 | 평화의 광장 농구장 A | 7/10", "슬램덩크하다가 그냥 갑자기 농구하고 싶다.. 같이 농구하실 분 구합니다~"))
-        listItem.add(ListViewModel("4", "농구 | 10/7 | 15:00 | 평화의 광장 농구장 B | 4/8", "농구할 사람 구합니다. 좀 잘하시는 분이면 환영합니다. 공은 저희가 챙겨오겠습니다."))
-        listItem.add(ListViewModel("5", "테니스 | 11/1 | 10:00 | 단국대 테니스장 B | 1/2", "테니스의 왕자 보다가 그냥 갑자기 테니스하고 싶다.. 같이 테니스 치실 분 구합니다~"))
-        listItem.add(ListViewModel("6", "풋살 | 10/5 | 16:00 | 단국대 풋살 경기장 | 5/8", "같이 풋살 하실 분 구합니다. 공은 저희가 가져오겠습니다."))
-        listItem.add(ListViewModel("7", "풋살 | 10/6 | 17:00 | 단국대 풋살 경기장 | 4/8", "피파온라인하다가 그냥 갑자기 요를레히 합니다. 같이 풋살하실 단국 죽전인 여러분! 오늘도 화이팅!"))
-        listItem.add(ListViewModel("8", "농구 | 10/7 | 14:00 | 평화의 광장 농구장 A | 7/10", "슬램덩크하다가 그냥 갑자기 농구하고 싶다.. 같이 농구하실 분 구합니다~"))
-        listItem.add(ListViewModel("9", "농구 | 10/7 | 15:00 | 평화의 광장 농구장 B | 4/8", "농구할 사람 구합니다. 좀 잘하시는 분이면 환영합니다. 공은 저희가 챙겨오겠습니다."))
-        listItem.add(ListViewModel("10", "테니스 | 10/10 | 10:00 | 단국대 테니스장 B | 1/2", "테니스의 왕자 보다가 그냥 갑자기 테니스하고 싶다.. 같이 테니스 치실 분 구합니다~"))
-        listItem.add(ListViewModel("11", "풋살 | 10/5 | 16:00 | 단국대 풋살 경기장 | 5/8", "같이 풋살 하실 분 구합니다. 공은 저희가 가져오겠습니다."))
-        listItem.add(ListViewModel("12", "풋살 | 10/6 | 17:00 | 단국대 풋살 경기장 | 4/8", "피파온라인하다가 그냥 갑자기 요를레히 합니다. 같이 풋살하실 단국 죽전인 여러분! 오늘도 화이팅!"))
-        listItem.add(ListViewModel("13", "농구 | 10/7 | 14:00 | 평화의 광장 농구장 A | 7/10", "슬램덩크하다가 그냥 갑자기 농구하고 싶다.. 같이 농구하실 분 구합니다~"))
-        listItem.add(ListViewModel("14", "농구 | 10/7 | 15:00 | 평화의 광장 농구장 B | 4/8", "농구할 사람 구합니다. 좀 잘하시는 분이면 환영합니다. 공은 저희가 챙겨오겠습니다."))
-        listItem.add(ListViewModel("15", "테니스 | 10/10 | 10:00 | 단국대 테니스장 B | 1/2", "테니스의 왕자 보다가 그냥 갑자기 테니스하고 싶다.. 같이 테니스 치실 분 구합니다~"))
-
-        // 전체 리스트뷰 보여주기
-        getListView(listItem)
+        var sports : String
+        var totalNum : String
+        var currentNum : String
+        var playTimeDate : String
+        var place : String
+        var content : String
+        var applyTime : String
+        var playTime : String
+        var playDate : String
+        var registrant : String
+        var title : String
+        matchDb.get().addOnSuccessListener {
+            for (mId in it.children) {
+                sports = it.child(mId.key.toString()).child("sports").value.toString()
+                playTimeDate = it.child(mId.key.toString()).child("playTime").value.toString()
+                if (playTimeDate.split(" ").size == 2) {
+                    playDate = playTimeDate.split(" ")[0]
+                    playTime = playTimeDate.split(" ")[1]
+                } else {
+                    playDate = "0"
+                    playTime = "0"
+                }
+                applyTime = it.child(mId.key.toString()).child("applyTime").value.toString()
+                place = it.child(mId.key.toString()).child("place").value.toString()
+                currentNum = it.child(mId.key.toString()).child("currentNum").value.toString()
+                totalNum = it.child(mId.key.toString()).child("totalNum").value.toString()
+                content = it.child(mId.key.toString()).child("content").value.toString()
+                registrant = it.child(mId.key.toString()).child("registrant").value.toString()
+                title = sports.plus(" | ${playDate} | ${playTime} | ${place} | ${currentNum}/${totalNum}")
+                listItem.add(0,ListViewModel(registrant, title, content))
+            }
+            // 전체 리스트뷰 보여주기
+            getListView(listItem)
+        }.addOnFailureListener{
+            Toast.makeText(context, "실패", Toast.LENGTH_LONG).show()
+        }
 
         // 날짜변환
-        var calendarView = viewGroup!!.findViewById<View>(R.id.calendarView) as CalendarView
-        calendarView!!.setOnDateChangeListener { calendarView, year, month, dayOfMonth ->
+        val calendarView = viewGroup!!.findViewById<View>(R.id.calendarView) as CalendarView
+        calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             val day: String
-            day = year.toString() + "년" + (month + 1) + "월" + dayOfMonth + "일"
+            val strMonth : String
+            val strDay : String
+            if (month+1 < 10) {
+                strMonth = "0" + (month+1).toString()
+            } else {
+                strMonth = (month+1).toString()
+            }
+            if (dayOfMonth < 10) {
+                strDay = "0" + dayOfMonth.toString()
+            } else {
+                strDay = dayOfMonth.toString()
+            }
+            day = year.toString() + "-" + strMonth + "-" + strDay
             showList(listItem, day)
         }
 
@@ -56,27 +92,23 @@ class SearchFragment : Fragment() {
     }
 
     fun showList(listItem: ArrayList<ListViewModel>, day:String) {
-        var i = 0
         val selectedListItem = arrayListOf<ListViewModel>()
         var listStrTitle : List<String>
         var listTitle : String
         var listDate : String
-        var pickedDay = day.substring(5)
-        pickedDay = pickedDay.replace("월", "/")
-        pickedDay = pickedDay.replace("일", "")
-        while (i < listItem.size) {
-            listTitle = listItem[i].title
+        val pickedDay = day.substring(0)
+        for (item in listItem) {
+            listTitle = item.title
             listStrTitle = listTitle.split("|")
             listDate = listStrTitle[1].trim()
-            if (listDate == pickedDay) {
-                selectedListItem.add(listItem[i])
-            }
-            i++
+            if (listDate == pickedDay)
+                selectedListItem.add(0,item)
         }
         getListView(selectedListItem)
     }
 
     fun getListView(listItem: ArrayList<ListViewModel>) {
+
         val listview = viewGroup!!.findViewById<ListView>(R.id.mainListView)
         val listviewAdapter = ListViewAdapter(listItem)
         listview.adapter = listviewAdapter
