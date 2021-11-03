@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.os.Bundle
 import android.service.autofill.FieldClassification
+import android.util.Log
 import android.view.View
 import android.widget.*
 import android.widget.Toast.LENGTH_SHORT
@@ -194,26 +195,21 @@ class ApplyFragment : Fragment() {
     }
 
     fun writeNewUser(user: FirebaseUser?, matchId: String) {
-        database.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (user != null) {
-                    for(snapshot in dataSnapshot.child("user").child(user.uid).child("matchId").children){
-                        array_matchId.add("${snapshot.value}")
-                    }
-                }
-                else {
-                    ///???
-                }
-                array_matchId.add(g_matchId.toString())
-                database.child("user").child(user!!.uid).child(matchId).setValue(array_matchId)
-            }
 
-
-            override fun onCancelled(databaseError: DatabaseError) {
+        if (user != null) {
+            database.child("user").child(user.uid).child("matchId").get().addOnSuccessListener {
+                array_matchId.add(it.value as String)
+                Log.i("firebase", "Got value ${it.value}")
+                Log.i("firebase", "$array_matchId")
+            }.addOnFailureListener{
                 Toast.makeText(getActivity(), "DB 읽기 실패", Toast.LENGTH_LONG).show()
             }
-        })
+        }
 
+        array_matchId.add(g_matchId.toString())
+        Log.i("firebase", "$array_matchId")
+        database.child("user").child(user!!.uid).child("matchId").setValue(array_matchId)
+        array_matchId.clear()
     }
 
     private fun setMatchData(user: FirebaseUser?) {
