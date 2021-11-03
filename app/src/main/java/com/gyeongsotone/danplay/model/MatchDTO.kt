@@ -1,10 +1,8 @@
 package com.gyeongsotone.danplay.model
 
-data class MatchDTO(var matchId : Long? = null,
-                    var userID : String? = null,
-                    var sports : String? = null,
+data class MatchDTO(var sports : String? = null,
                     var totalNum : Int? = null,
-                    var currentNum : Int? = null,
+                    var registrant : ArrayList<String>? = null,
                     var place : String? = null,
                     var content : String? = null,
                     var playTime : String? = null,

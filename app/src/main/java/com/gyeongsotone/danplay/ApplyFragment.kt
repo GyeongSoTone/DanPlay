@@ -12,14 +12,20 @@ import android.view.View
 import android.widget.*
 import android.widget.Toast.LENGTH_SHORT
 import androidx.fragment.app.Fragment
+import com.google.android.gms.common.util.Base64Utils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.gyeongsotone.danplay.databinding.ActivitySignupBinding
 import com.gyeongsotone.danplay.databinding.FragmentApplyBinding
 import com.gyeongsotone.danplay.model.MatchDTO
+import java.security.DigestException
+import java.security.MessageDigest
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDate.*
 import java.util.*
@@ -31,7 +37,7 @@ class ApplyFragment : Fragment() {
     private var g_sport: String? = null
     private var g_people: Int? = null
     private var g_place: String? = null
-    // private var g_time: String? = null
+    private var g_time: String? = null
     private var g_content: String? = null
 
     private lateinit var auth: FirebaseAuth
@@ -56,6 +62,8 @@ class ApplyFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
         database = Firebase.database.reference
+
+        var current_user = auth.currentUser!!
 
         btn_event.setOnClickListener {
             //Toast.makeText(getActivity(), "~", Toast.LENGTH_LONG).show()
@@ -129,8 +137,9 @@ class ApplyFragment : Fragment() {
                 var listener2 = TimePickerDialog.OnTimeSetListener { timePicker, i, i2 ->
                     hour = i
                     minute = i2
-                    // 시간 원하는 단위로 합치기
-                    btn_time.text = "${year}년 ${month}월 ${day}일 ${i}시 ${i2}분"
+
+                    g_time = "%d-%02d-%02d %02d:%02d:00".format(year, month, day, i, i2)
+                    btn_time.text = g_time
                 }
                 var picker2 = TimePickerDialog(activity, listener2, hour, minute, false ) // true하면 24시간 제
                 picker2.show()
@@ -140,36 +149,90 @@ class ApplyFragment : Fragment() {
         }
 
         btn_apply.setOnClickListener {
-            // content 문자열 저장
-            g_content = edittext_content.text.toString()
-            Toast.makeText(activity,g_content.toString(), Toast.LENGTH_SHORT).show()
-            setMatchData()
+            //Toast.makeText(activity,currentTime.toString(), Toast.LENGTH_SHORT).show()
+
+            g_content = edittext_content.getText().toString()
+            setMatchData(current_user)
         }
 
 
         return viewGroup
     }
 
-    private fun setMatchData() {
-        var MatchDTO = MatchDTO()
+    private val digits = "0123456789ABCDEF"
 
-        //if (user != null) {
-            MatchDTO.matchId = 1010
-            MatchDTO.sports = g_sport
-            MatchDTO.totalNum = g_people
-            MatchDTO.currentNum = 1
-            MatchDTO.place = g_place
-            MatchDTO.content = g_content
-            MatchDTO.playTime = "long"
-            MatchDTO.applyTime = "12"
-
-            database.child("match").child(MatchDTO.matchId.toString()).setValue(MatchDTO)
-        //}
+    fun bytesToHex(byteArray: ByteArray): String {
+        val hexChars = CharArray(byteArray.size * 2)
+        for (i in byteArray.indices) {
+            val v = byteArray[i].toInt() and 0xff
+            hexChars[i * 2] = digits[v shr 4]
+            hexChars[i * 2 + 1] = digits[v and 0xf]
+        }
+        return String(hexChars)
     }
 
-    private fun moveMainPage(user: FirebaseUser?) {
+    fun hashSHA256(msg: String): String {
+        val hash: ByteArray
+        try {
+            val md = MessageDigest.getInstance("SHA-256")
+            md.update(msg.toByteArray())
+            hash = md.digest()
+        } catch (e: CloneNotSupportedException) {
+            throw DigestException("couldn't make digest of partial content");
+        }
+
+        return bytesToHex(hash)
+    }
+
+    fun writeNewUser(user: FirebaseUser?, matchId: String) {
+        database.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (user != null) {
+                    for(snapshot in dataSnapshot.child("user").child(user.uid).child("matchId").children){
+
+                    }
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                Toast.makeText(getActivity(), "DB 읽기 실패", Toast.LENGTH_LONG).show()
+            }
+        })
+
+        database.child("user").child(userId).child("matchId").setValue(matchId)
+    }
+
+    private fun setMatchData(user: FirebaseUser?) {
+        var MatchDTO = MatchDTO()
+        val currentTime = System.currentTimeMillis()
+        val timeFormat = SimpleDateFormat("HH:mm:ss")
+        val dataFormat = SimpleDateFormat("yyyy-MM-dd")
+        val date = dataFormat.format(currentTime)
+        val time = timeFormat.format(currentTime)
+
+        if (user != null) {
+            MatchDTO.sports = g_sport
+            MatchDTO.totalNum = g_people
+            MatchDTO.place = g_place
+            MatchDTO.content = g_content
+
+            MatchDTO.registrant?.add(user.uid.toString())
+
+            MatchDTO.playTime = g_time
+            MatchDTO.applyTime = date.toString() + ' ' + time.toString()
+            val temp = hashSHA256(g_sport.plus(g_time.plus(g_place)))
+
+            Toast.makeText(activity,temp, Toast.LENGTH_SHORT).show()
+
+            database.child("match").child(temp).setValue(MatchDTO)
+
+            moveMainPage(user, temp)
+        }
+    }
+
+    private fun moveMainPage(user: FirebaseUser?, matchId: String) {
         if (user != null) {
             Toast.makeText(activity, "매치 등록 완료되었습니다.", Toast.LENGTH_SHORT).show()
+            writeNewUser(user.uid, matchId)
             // 다음 페이지로 넘어가는 Intent
         }
     }
