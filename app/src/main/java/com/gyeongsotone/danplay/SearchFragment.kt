@@ -2,10 +2,12 @@ package com.gyeongsotone.danplay
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
@@ -53,7 +55,7 @@ class SearchFragment : Fragment() {
                 playTimeDate = it.child(mId.key.toString()).child("playTime").value.toString()
                 if (playTimeDate.split(" ").size == 2) {
                     playDate = playTimeDate.split(" ")[0]
-                    playTime = playTimeDate.split(" ")[1]
+                    playTime = playTimeDate.split(" ")[1].substring(0,5)
                 } else {
                     playDate = "0"
                     playTime = "0"
@@ -116,7 +118,10 @@ class SearchFragment : Fragment() {
         val listviewAdapter = ListViewAdapter(listItem)
         listview.adapter = listviewAdapter
         listview.setOnItemClickListener{ parent, view, position, id ->
-            Toast.makeText(getActivity(), "상세 내용 페이지로 이동 예정!", Toast.LENGTH_LONG).show()
+            val clickedList = listItem[position]
+            val intent = Intent(requireActivity().applicationContext, DetailActivity::class.java)
+            intent.putExtra("matchInfo", clickedList)
+            startActivity(intent)
         }
     }
 }

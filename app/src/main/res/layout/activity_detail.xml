@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="-16dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <TextView
+            android:text="매칭 참여"
+            android:textSize="32sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:gravity="center|bottom">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:paddingRight="30dp"
+                android:text="방장"
+                android:textColor="@color/black"
+                android:textSize="21dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textview_name"
+                android:layout_width="250dp"
+                android:layout_height="30dp"
+                android:background="@drawable/btn_event"
+                android:text="이름"
+                android:textSize="15sp"
+                android:textAlignment="center"
+                android:textColor="@color/gray"
+                android:textStyle="bold"
+                android:layout_marginBottom="2dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center|bottom">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:paddingRight="30dp"
+                android:text="종목"
+                android:textColor="@color/black"
+                android:textSize="21dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textview_sports"
+                android:layout_width="250dp"
+                android:layout_height="30dp"
+                android:background="@drawable/btn_event"
+                android:text="스포츠"
+                android:textSize="15sp"
+                android:textAlignment="center"
+                android:textColor="@color/gray"
+                android:textStyle="bold"
+                android:layout_marginBottom="2dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center|bottom">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:paddingRight="30dp"
+                android:text="인원"
+                android:textColor="@color/black"
+                android:textSize="21dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textview_number"
+                android:layout_width="250dp"
+                android:layout_height="30dp"
+                android:background="@drawable/btn_event"
+                android:text="인원"
+                android:textSize="15sp"
+                android:textAlignment="center"
+                android:textColor="@color/gray"
+                android:textStyle="bold"
+                android:layout_marginBottom="2dp"/>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center|bottom">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:paddingRight="30dp"
+                android:text="시간"
+                android:textColor="@color/black"
+                android:textSize="21dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textview_time"
+                android:layout_width="250dp"
+                android:layout_height="30dp"
+                android:background="@drawable/btn_event"
+                android:text="시간"
+                android:textSize="15sp"
+                android:textAlignment="center"
+                android:textColor="@color/gray"
+                android:textStyle="bold"
+                android:layout_marginBottom="2dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center|bottom">
+
+            <TextView
+                android:id="@+id/text_where"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:paddingRight="30dp"
+                android:text="장소"
+                android:textColor="@color/black"
+                android:textSize="21dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textview_place"
+                android:layout_width="250dp"
+                android:layout_height="30dp"
+                android:background="@drawable/btn_event"
+                android:text="장소"
+                android:textSize="15sp"
+                android:textAlignment="center"
+                android:textColor="@color/gray"
+                android:textStyle="bold"
+                android:layout_marginBottom="2dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="280dp"
+            android:gravity="center|bottom"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textview_content"
+                android:layout_width="330dp"
+                android:layout_height="180dp"
+                android:background="@drawable/edit"
+                android:text="내용"
+                android:textSize="18sp"
+                android:textColorHint="@color/gray" />
+
+            <Button
+                android:id="@+id/button_participation"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/btn"
+                android:text="참여하기"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <FrameLayout android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/fl_container"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
