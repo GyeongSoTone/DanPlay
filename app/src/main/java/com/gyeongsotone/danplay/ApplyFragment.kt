@@ -16,6 +16,7 @@ import com.google.android.gms.common.util.Base64Utils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
@@ -39,9 +40,17 @@ class ApplyFragment : Fragment() {
     private var g_place: String? = null
     private var g_time: String? = null
     private var g_content: String? = null
+    private var g_matchId :String?= null
+
+    private var array_matchId : ArrayList<String> = ArrayList()
+    //private var array_userId : ArrayList<Int> = ArrayList()
+
+
 
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -189,16 +198,22 @@ class ApplyFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (user != null) {
                     for(snapshot in dataSnapshot.child("user").child(user.uid).child("matchId").children){
-
+                        array_matchId.add("${snapshot.value}")
                     }
                 }
+                else {
+                    ///???
+                }
+                array_matchId.add(g_matchId.toString())
+                database.child("user").child(user!!.uid).child(matchId).setValue(array_matchId)
             }
+
+
             override fun onCancelled(databaseError: DatabaseError) {
                 Toast.makeText(getActivity(), "DB 읽기 실패", Toast.LENGTH_LONG).show()
             }
         })
 
-        database.child("user").child(userId).child("matchId").setValue(matchId)
     }
 
     private fun setMatchData(user: FirebaseUser?) {
@@ -214,25 +229,24 @@ class ApplyFragment : Fragment() {
             MatchDTO.totalNum = g_people
             MatchDTO.place = g_place
             MatchDTO.content = g_content
-
-            MatchDTO.registrant?.add(user.uid.toString())
+            MatchDTO.registrant = array_matchId
 
             MatchDTO.playTime = g_time
             MatchDTO.applyTime = date.toString() + ' ' + time.toString()
-            val temp = hashSHA256(g_sport.plus(g_time.plus(g_place)))
+            g_matchId = hashSHA256(g_sport.plus(g_time.plus(g_place)))
 
-            Toast.makeText(activity,temp, Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity,g_matchId, Toast.LENGTH_SHORT).show()
 
-            database.child("match").child(temp).setValue(MatchDTO)
+            database.child("match").child(g_matchId.toString()).setValue(MatchDTO)
 
-            moveMainPage(user, temp)
+            moveMainPage(user, g_matchId.toString())
         }
     }
 
     private fun moveMainPage(user: FirebaseUser?, matchId: String) {
         if (user != null) {
             Toast.makeText(activity, "매치 등록 완료되었습니다.", Toast.LENGTH_SHORT).show()
-            writeNewUser(user.uid, matchId)
+            writeNewUser(user, matchId)
             // 다음 페이지로 넘어가는 Intent
         }
     }
