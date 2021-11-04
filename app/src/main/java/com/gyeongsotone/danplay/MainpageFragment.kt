@@ -61,8 +61,8 @@ class MainpageFragment : Fragment() {
                     else if(snapshot.key.equals("matchId")){
                         var match0 = snapshot.child("0").value.toString()
                         var match1 = snapshot.child("1").value.toString()
+                        var temp = ""
                         for(snapshot in dataSnapshot.child("match").children){
-                            var temp = ""
                             if(snapshot.key.equals(match0)){
                                 var match_time = snapshot.child("playTime").value.toString()
                                 var match_sports = snapshot.child("sports").value.toString()
