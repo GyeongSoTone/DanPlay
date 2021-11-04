@@ -184,11 +184,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/text_myMatch"
+            android:id="@+id/text_my_match"
             android:layout_width="106dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="60dp"
-            android:text="10/05 16:30 풋살\n10/06 05:00 축구"
+            android:text=""
             android:textColor="#000000"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"

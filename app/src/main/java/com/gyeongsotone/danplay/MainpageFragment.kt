@@ -32,6 +32,7 @@ class MainpageFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         var current_user = auth.currentUser!!
         var name = viewGroup!!.findViewById<View>(R.id.text_name) as TextView
+        var my_match = viewGroup!!.findViewById<View>(R.id.text_my_match) as TextView
         var text_sports1 = viewGroup!!.findViewById<View>(R.id.text_sports1) as TextView
         var text_sports2 = viewGroup!!.findViewById<View>(R.id.text_sports2) as TextView
         var text_sports3 = viewGroup!!.findViewById<View>(R.id.text_sports3) as TextView
@@ -56,6 +57,28 @@ class MainpageFragment : Fragment() {
                         setImage(text_sports2, btn_sports2)
                         setImage(text_sports3, btn_sports3)
                         setImage(text_sports4, btn_sports4)
+                    }
+                    else if(snapshot.key.equals("matchId")){
+                        var match0 = snapshot.child("0").value.toString()
+                        var match1 = snapshot.child("1").value.toString()
+                        for(snapshot in dataSnapshot.child("match").children){
+                            var temp = ""
+                            if(snapshot.key.equals(match0)){
+                                var match_time = snapshot.child("playTime").value.toString()
+                                var match_sports = snapshot.child("sports").value.toString()
+                                temp = match_time.slice(IntRange(5, 15))
+                                temp = temp + " " + match_sports
+                                //my_match.setText(temp)
+                            }
+                            if(snapshot.key.equals(match1)){
+                                var match_time = snapshot.child("playTime").value.toString()
+                                var match_sports = snapshot.child("sports").value.toString()
+                                temp = temp + "\n" + match_time.slice(IntRange(5, 15))
+                                temp = temp + " " + match_sports
+                                //my_match.setText(temp)
+                            }
+                            my_match.setText(temp)
+                        }
                     }
                     else{
                         // ???
