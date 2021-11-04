@@ -1,10 +1,12 @@
-package com.gyeongsotone.danplay
+package com.gyeongsotone.danplay.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
+import com.gyeongsotone.danplay.ListViewModel
+import com.gyeongsotone.danplay.R
 
 class ListViewAdapter(val List : MutableList<ListViewModel>) : BaseAdapter() {
     override fun getCount(): Int {
