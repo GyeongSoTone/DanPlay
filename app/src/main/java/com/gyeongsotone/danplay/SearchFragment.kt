@@ -7,9 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
 
 class SearchFragment : Fragment() {
     var viewGroup: ViewGroup? = null

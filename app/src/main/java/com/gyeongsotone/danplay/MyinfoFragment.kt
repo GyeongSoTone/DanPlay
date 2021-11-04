@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.ImageButton
+import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.gyeongsotone.danplay.adapter.ListViewAdapter
 
 class MyinfoFragment : Fragment() {
     var viewGroup: ViewGroup? = null
@@ -31,11 +32,31 @@ class MyinfoFragment : Fragment() {
         viewGroup = inflater.inflate(R.layout.fragment_myinfo, container, false) as ViewGroup
         database = Firebase.database.reference
         auth = FirebaseAuth.getInstance()
+        var listItem = arrayListOf<ListViewModel>()
+
         var current_user = auth.currentUser!!
         var btn_signout = viewGroup!!.findViewById<View>(R.id.signout) as Button
         var btn_logout = viewGroup!!.findViewById<View>(R.id.logout) as Button
         var btn_contact = viewGroup!!.findViewById<View>(R.id.contact) as Button
         //var btn_profile_change = viewGroup!!.findViewById<View>(R.id.profile_change) as Button
+
+        database.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for(snapshot in dataSnapshot.child("user").child(current_user.uid).child("matchId").children){
+                    var my_match = snapshot.value.toString()
+                    for(snapshot in dataSnapshot.child("match").children){
+                        if(snapshot.key.equals(my_match)){
+                            listItem = getMatchDb(snapshot)
+                            getListView(listItem)
+                        }
+                    }
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                Toast.makeText(getActivity(), "DB 읽기 실패", Toast.LENGTH_LONG).show()
+            }
+        })
+
 
         // 회원탈퇴
         btn_signout.setOnClickListener {
@@ -97,5 +118,53 @@ class MyinfoFragment : Fragment() {
             alert.show()
         }
         return viewGroup
+    }
+
+    fun getMatchDb(it : DataSnapshot) : ArrayList<ListViewModel> {
+        var mapItem = mutableMapOf<String, ListViewModel>()
+        val listItem = arrayListOf<ListViewModel>()
+        var sports : String
+        var totalNum : String
+        var currentNum : String
+        var playTimeDate : String
+        var place : String
+        var content : String
+        var applyTime : String
+        var playTime : String
+        var playDate : String
+        var registrant : String
+        var title : String
+
+        for (mId in it.children) {
+            currentNum = it.child("currentNum").value.toString()
+            totalNum = it.child("totalNum").value.toString()
+            if (totalNum == currentNum)
+                continue
+            sports = it.child("sports").value.toString()
+            playTimeDate = it.child("playTime").value.toString()
+            if (playTimeDate.split(" ").size == 2) {
+                playDate = playTimeDate.split(" ")[0]
+                playTime = playTimeDate.split(" ")[1].substring(0,5)
+            } else {
+                playDate = "0"
+                playTime = "0"
+            }
+            applyTime = it.child("applyTime").value.toString()
+            place = it.child("place").value.toString()
+            content = it.child("content").value.toString()
+            registrant = it.child("registrant").value.toString()
+            title = sports.plus(" | ${playDate} | ${playTime} | ${place} | ${currentNum}/${totalNum}")
+            mapItem.put(playTimeDate, ListViewModel(registrant, title, content))
+        }
+        mapItem = mapItem.toSortedMap(reverseOrder())
+        for (value in mapItem.values)
+            listItem.add(0, value)
+        return listItem
+    }
+
+    fun getListView(listItem: ArrayList<ListViewModel>) {
+        val listview = viewGroup!!.findViewById<ListView>(R.id.mymatchListView)
+        val listviewAdapter = ListViewAdapter(listItem)
+        listview.adapter = listviewAdapter
     }
 }
