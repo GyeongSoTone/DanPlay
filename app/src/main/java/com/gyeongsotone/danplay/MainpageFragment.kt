@@ -31,6 +31,8 @@ class MainpageFragment : Fragment() {
         database = Firebase.database.reference
         auth = FirebaseAuth.getInstance()
         var current_user = auth.currentUser!!
+        var mymatch_list = ArrayList<String>()
+        var temp : String
         var name = viewGroup!!.findViewById<View>(R.id.text_name) as TextView
         var my_match = viewGroup!!.findViewById<View>(R.id.text_my_match) as TextView
         var text_sports1 = viewGroup!!.findViewById<View>(R.id.text_sports1) as TextView
@@ -44,6 +46,7 @@ class MainpageFragment : Fragment() {
 
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                var i = 0
                 for(snapshot in dataSnapshot.child("user").child(current_user.uid).children){
                     if(snapshot.key.equals("name")){
                         name.setText("${snapshot.value}")
@@ -59,30 +62,38 @@ class MainpageFragment : Fragment() {
                         setImage(text_sports4, btn_sports4)
                     }
                     else if(snapshot.key.equals("matchId")){
-                        var match0 = snapshot.child("0").value.toString()
-                        var match1 = snapshot.child("1").value.toString()
-                        var temp = ""
-                        for(snapshot in dataSnapshot.child("match").children){
-                            if(snapshot.key.equals(match0)){
-                                var match_time = snapshot.child("playTime").value.toString()
-                                var match_sports = snapshot.child("sports").value.toString()
-                                temp = match_time.slice(IntRange(5, 15))
-                                temp = temp + " " + match_sports
-                                //my_match.setText(temp)
+                        i = 1
+                        for(snapshot in dataSnapshot.child("user").child(current_user.uid).child("matchId").children) {
+                            var match = snapshot.value.toString()
+                            for(snapshot in dataSnapshot.child("match").children){
+                                if(snapshot.key.equals(match)){
+                                    var match_time = snapshot.child("playTime").value.toString()
+                                    var match_sports = snapshot.child("sports").value.toString()
+                                    temp = match_time.slice(IntRange(5, 15))
+                                    temp = temp + " " + match_sports
+                                    mymatch_list.add(temp)
+                                }
                             }
-                            if(snapshot.key.equals(match1)){
-                                var match_time = snapshot.child("playTime").value.toString()
-                                var match_sports = snapshot.child("sports").value.toString()
-                                temp = temp + "\n" + match_time.slice(IntRange(5, 15))
-                                temp = temp + " " + match_sports
-                                //my_match.setText(temp)
-                            }
+                        }
+                        mymatch_list.sort()
+                        if(mymatch_list.count() == 0){
+                            my_match.setText("예약된 매치 없음")
+                        }
+                        else if(mymatch_list.count() == 1){
+                            temp = mymatch_list[0]
+                            my_match.setText(temp)
+                        }
+                        else{
+                            temp = mymatch_list[0] + "\n" + mymatch_list[1]
                             my_match.setText(temp)
                         }
                     }
                     else{
                         // ???
                     }
+                }
+                if(i == 0){
+                    my_match.setText("예약된 매치 없음")
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {

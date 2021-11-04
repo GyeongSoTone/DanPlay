@@ -44,14 +44,20 @@ class MyinfoFragment : Fragment() {
 
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                var i = 0
                 for(snapshot in dataSnapshot.child("user").child(current_user.uid).child("matchId").children){
                     var my_match = snapshot.value.toString()
                     for(snapshot in dataSnapshot.child("match").children){
+                        i = 1
                         if(snapshot.key.equals(my_match)){
                             listItem = getMatchDb(snapshot) // 여기
                             //getListView(listItem)
                         }
                     }
+                }
+                if(i == 0){
+                    listItem.clear()
+                    listItem.add(0, ListViewModel("", "", "예약된 매치 없음"))
                 }
                 getListView(listItem)
             }
