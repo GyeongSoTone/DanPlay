@@ -52,10 +52,14 @@ class MainpageFragment : Fragment() {
                         name.setText("${snapshot.value}")
                     }
                     else if(snapshot.key.equals("preference")){
-                        text_sports1.setText("${snapshot.child("0").value}")
-                        text_sports2.setText("${snapshot.child("1").value}")
-                        text_sports3.setText("${snapshot.child("2").value}")
-                        text_sports4.setText("${snapshot.child("3").value}")
+                        text_sports1.setText(snapshot.child("0").value.toString())
+                        text_sports2.setText(snapshot.child("1").value.toString())
+                        text_sports3.setText(snapshot.child("2").value.toString())
+                        text_sports4.setText(snapshot.child("3").value.toString())
+                        testNull(text_sports1)
+                        testNull(text_sports2)
+                        testNull(text_sports3)
+                        testNull(text_sports4)
                         setImage(text_sports1, btn_sports1)
                         setImage(text_sports2, btn_sports2)
                         setImage(text_sports3, btn_sports3)
@@ -102,6 +106,12 @@ class MainpageFragment : Fragment() {
         })
 
         return viewGroup
+    }
+
+    fun testNull(text_sports: TextView){
+        if(text_sports.getText().equals("null")){
+            text_sports.setText("")
+        }
     }
 
     fun setImage(text_sports: TextView, btn_sports: ImageButton){
