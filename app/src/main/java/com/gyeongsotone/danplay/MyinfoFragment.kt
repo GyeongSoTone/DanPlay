@@ -18,11 +18,14 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.gyeongsotone.danplay.adapter.ListViewAdapter
+import kotlin.collections.ArrayList
 
 class MyinfoFragment : Fragment() {
     var viewGroup: ViewGroup? = null
     private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
+    private var listItem = arrayListOf<ListViewModel>()
+    private var mapItem = mutableMapOf<String, ListViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,8 +35,7 @@ class MyinfoFragment : Fragment() {
         viewGroup = inflater.inflate(R.layout.fragment_myinfo, container, false) as ViewGroup
         database = Firebase.database.reference
         auth = FirebaseAuth.getInstance()
-        var listItem = arrayListOf<ListViewModel>()
-
+        //var listItem = arrayListOf<ListViewModel>()  // 여기
         var current_user = auth.currentUser!!
         var btn_signout = viewGroup!!.findViewById<View>(R.id.signout) as Button
         var btn_logout = viewGroup!!.findViewById<View>(R.id.logout) as Button
@@ -46,11 +48,12 @@ class MyinfoFragment : Fragment() {
                     var my_match = snapshot.value.toString()
                     for(snapshot in dataSnapshot.child("match").children){
                         if(snapshot.key.equals(my_match)){
-                            listItem = getMatchDb(snapshot)
-                            getListView(listItem)
+                            listItem = getMatchDb(snapshot) // 여기
+                            //getListView(listItem)
                         }
                     }
                 }
+                getListView(listItem)
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 Toast.makeText(getActivity(), "DB 읽기 실패", Toast.LENGTH_LONG).show()
@@ -121,8 +124,8 @@ class MyinfoFragment : Fragment() {
     }
 
     fun getMatchDb(it : DataSnapshot) : ArrayList<ListViewModel> {
-        var mapItem = mutableMapOf<String, ListViewModel>()
-        val listItem = arrayListOf<ListViewModel>()
+        //var mapItem = mutableMapOf<String, ListViewModel>()
+        val local_listItem = arrayListOf<ListViewModel>()
         var sports : String
         var totalNum : String
         var currentNum : String
@@ -135,31 +138,29 @@ class MyinfoFragment : Fragment() {
         var registrant : String
         var title : String
 
-        for (mId in it.children) {
-            currentNum = it.child("currentNum").value.toString()
-            totalNum = it.child("totalNum").value.toString()
-            if (totalNum == currentNum)
-                continue
-            sports = it.child("sports").value.toString()
-            playTimeDate = it.child("playTime").value.toString()
-            if (playTimeDate.split(" ").size == 2) {
-                playDate = playTimeDate.split(" ")[0]
-                playTime = playTimeDate.split(" ")[1].substring(0,5)
-            } else {
-                playDate = "0"
-                playTime = "0"
-            }
-            applyTime = it.child("applyTime").value.toString()
-            place = it.child("place").value.toString()
-            content = it.child("content").value.toString()
-            registrant = it.child("registrant").value.toString()
-            title = sports.plus(" | ${playDate} | ${playTime} | ${place} | ${currentNum}/${totalNum}")
-            mapItem.put(playTimeDate, ListViewModel(registrant, title, content))
+
+        currentNum = it.child("currentNum").value.toString()
+        totalNum = it.child("totalNum").value.toString()
+        sports = it.child("sports").value.toString()
+        playTimeDate = it.child("playTime").value.toString()
+        if (playTimeDate.split(" ").size == 2) {
+            playDate = playTimeDate.split(" ")[0]
+            playTime = playTimeDate.split(" ")[1].substring(0,5)
+        } else {
+            playDate = "0"
+            playTime = "0"
         }
+        applyTime = it.child("applyTime").value.toString()
+        place = it.child("place").value.toString()
+        content = it.child("content").value.toString()
+        registrant = it.child("registrant").value.toString()
+        title = sports.plus(" | ${playDate} | ${playTime} | ${place} | ${currentNum}/${totalNum}")
+        mapItem.put(playTimeDate, ListViewModel(registrant, title, content))
+
         mapItem = mapItem.toSortedMap(reverseOrder())
         for (value in mapItem.values)
-            listItem.add(0, value)
-        return listItem
+            local_listItem.add(0, value)
+        return local_listItem
     }
 
     fun getListView(listItem: ArrayList<ListViewModel>) {
