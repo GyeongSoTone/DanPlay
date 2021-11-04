@@ -7,11 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.gyeongsotone.danplay.adapter.ListViewAdapter
 import kotlin.collections.ArrayList
 
 class SearchFragment : Fragment() {
@@ -32,6 +32,7 @@ class SearchFragment : Fragment() {
         database = Firebase.database.reference
 
         val matchDb = database.child("match")
+        var MapItem = mutableMapOf<String, ListViewModel>()
         val listItem = arrayListOf<ListViewModel>()
         var sports : String
         var totalNum : String
@@ -65,8 +66,18 @@ class SearchFragment : Fragment() {
                 content = it.child(mId.key.toString()).child("content").value.toString()
                 registrant = it.child(mId.key.toString()).child("registrant").value.toString()
                 title = sports.plus(" | ${playDate} | ${playTime} | ${place} | ${currentNum}/${totalNum}")
-                listItem.add(0,ListViewModel(registrant, title, content))
+                MapItem.put(playTimeDate, ListViewModel(registrant, title, content))
+//                listItem.add(0,ListViewModel(registrant, title, content))
             }
+//            var sortedByValue = MapItem.toList().sortedWith(compareBy({it.first})).toMap()
+            MapItem = MapItem.toSortedMap(reverseOrder())
+            var i = 0
+            for (value in MapItem.values) {
+                Log.i("소재헌+_+", value.toString())
+                listItem.add(0, value)
+            }
+
+
             // 전체 리스트뷰 보여주기
             getListView(listItem)
         }.addOnFailureListener{
@@ -102,12 +113,15 @@ class SearchFragment : Fragment() {
         var listTitle : String
         var listDate : String
         val pickedDay = day.substring(0)
+        var i = 0
         for (item in listItem) {
             listTitle = item.title
             listStrTitle = listTitle.split("|")
             listDate = listStrTitle[1].trim()
-            if (listDate == pickedDay)
-                selectedListItem.add(0,item)
+            if (listDate == pickedDay) {
+                selectedListItem.add(i, item)
+                i++
+            }
         }
         getListView(selectedListItem)
     }
