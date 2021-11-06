@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.graphics.PointF.length
+import android.net.Uri
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.os.Bundle
@@ -61,11 +62,14 @@ class ApplyFragment : Fragment() {
         var playtime_empty = viewGroup!!.findViewById<View>(R.id.apply_playtime_empty) as TextView
         var totalNum_empty = viewGroup!!.findViewById<View>(R.id.apply_totalNum_empty) as TextView
         var place_empty = viewGroup!!.findViewById<View>(R.id.apply_place_empty) as TextView
-
+        var url = viewGroup!!.findViewById<View>(R.id.url) as TextView
 
         var btn_apply = viewGroup!!.findViewById<View>(R.id.btn_apply) as Button
 
-
+        url.setOnClickListener {
+            var intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://webinfo.dankook.ac.kr/tiad/admi/faci/usem/views/findFacsUseApWeblList.do?_view=ok"))
+            startActivity(intent)
+        }
 
 
 
