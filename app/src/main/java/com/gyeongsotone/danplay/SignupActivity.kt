@@ -33,6 +33,7 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
     private var sports_list : ArrayList<String> = ArrayList()
     private var user_preference : ArrayList<String> = ArrayList()
     private var prefer_button_state : ArrayList<Int> = ArrayList()
+    private var matchId_init : ArrayList<String> = ArrayList()
 
     private var signup_id_state : String = ""
 
@@ -248,6 +249,9 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
 
             UserDTO.sex = user_sex
 
+
+            matchId_init.add("-1")
+            UserDTO.matchId = matchId_init
 
             for (i in 0 until prefer_button.size step (1)) {
                 if(prefer_button_state[i] == 1)
