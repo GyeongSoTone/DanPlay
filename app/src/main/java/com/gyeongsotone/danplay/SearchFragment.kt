@@ -2,7 +2,6 @@ package com.gyeongsotone.danplay
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +37,7 @@ class SearchFragment : Fragment() {
         val matchDb = database.child("match")
         var listItem = arrayListOf<ListViewModel>()
 
-        matchDb.get().addOnSuccessListener {
+        database.get().addOnSuccessListener {
             listItem = getMatchDb(it)
             getListView(listItem)
         }.addOnFailureListener{
@@ -70,7 +69,7 @@ class SearchFragment : Fragment() {
 
     fun getMatchDb(it : DataSnapshot) : ArrayList<ListViewModel> {
         var mapItem = mutableMapOf<String, ListViewModel>()
-        val listItem = arrayListOf<ListViewModel>()
+        var listItem = arrayListOf<ListViewModel>()
         var sports : String
         var totalNum : String
         var currentNum : String
@@ -82,14 +81,15 @@ class SearchFragment : Fragment() {
         var playDate : String
         var registrant : String
         var title : String
-
-        for (mId in it.children) {
-            currentNum = it.child(mId.key.toString()).child("currentNum").value.toString()
-            totalNum = it.child(mId.key.toString()).child("totalNum").value.toString()
-            if (totalNum == currentNum)
+        for (mId in it.child("match").children) {
+            currentNum = it.child("match").child(mId.key.toString()).child("registrant").childrenCount.toString()
+            totalNum = it.child("match").child(mId.key.toString()).child("totalNum").value.toString()
+            if (totalNum == currentNum) {
+                Toast.makeText(context, "인원이 가득 찼습니다.", Toast.LENGTH_LONG).show()
                 continue
-            sports = it.child(mId.key.toString()).child("sports").value.toString()
-            playTimeDate = it.child(mId.key.toString()).child("playTime").value.toString()
+            }
+            sports = it.child("match").child(mId.key.toString()).child("sports").value.toString()
+            playTimeDate = it.child("match").child(mId.key.toString()).child("playTime").value.toString()
             if (playTimeDate.split(" ").size == 2) {
                 playDate = playTimeDate.split(" ")[0]
                 playTime = playTimeDate.split(" ")[1].substring(0,5)
@@ -97,12 +97,13 @@ class SearchFragment : Fragment() {
                 playDate = "0"
                 playTime = "0"
             }
-            applyTime = it.child(mId.key.toString()).child("applyTime").value.toString()
-            place = it.child(mId.key.toString()).child("place").value.toString()
-            content = it.child(mId.key.toString()).child("content").value.toString()
-            registrant = it.child(mId.key.toString()).child("registrant").value.toString()
+            applyTime = it.child("match").child(mId.key.toString()).child("applyTime").value.toString()
+            place = it.child("match").child(mId.key.toString()).child("place").value.toString()
+            content = it.child("match").child(mId.key.toString()).child("content").value.toString()
+            registrant = it.child("match").child(mId.key.toString()).child("registrant").child("0").value.toString()
+            registrant = it.child("user").child(registrant).child("name").value.toString()
             title = sports.plus(" | ${playDate} | ${playTime} | ${place} | ${currentNum}/${totalNum}")
-            mapItem.put(playTimeDate, ListViewModel(registrant, title, content))
+            mapItem.put(playTimeDate, ListViewModel(registrant, title, content, mId.key.toString()))
         }
         mapItem = mapItem.toSortedMap(reverseOrder())
         for (value in mapItem.values)
@@ -111,7 +112,7 @@ class SearchFragment : Fragment() {
         return listItem
     }
     fun showList(listItem: ArrayList<ListViewModel>, day:String) {
-        val selectedListItem = arrayListOf<ListViewModel>()
+        var selectedListItem = arrayListOf<ListViewModel>()
         var listStrTitle : List<String>
         var listTitle : String
         var listDate : String
@@ -137,6 +138,7 @@ class SearchFragment : Fragment() {
             val clickedList = listItem[position]
             val intent = Intent(requireActivity().applicationContext, DetailActivity::class.java)
             intent.putExtra("matchInfo", clickedList)
+            intent.putExtra("matchId", clickedList.matchId)
             startActivity(intent)
         }
     }

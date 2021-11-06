@@ -4,8 +4,9 @@ import java.io.Serializable
 
 data class ListViewModel (
     val name : String,
-    val title : String,
+    var title : String,
     val content : String,
+    val matchId : String,
 ):Serializable {
 
 }
