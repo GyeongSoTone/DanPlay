@@ -4,9 +4,12 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.graphics.PointF.length
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.os.Bundle
+import android.text.Selection.setSelection
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -27,12 +30,16 @@ import kotlin.collections.ArrayList
 class ApplyFragment : Fragment() {
     var viewGroup: ViewGroup? = null
 
-    private var g_sport: String? = null
+    private var g_sport: String? = "종목 선택"
     private var g_people: Int? = null
-    private var g_place: String? = null
-    private var g_time: String? = null
+    private var g_place: String? = "장소 선택"
+    private var g_time: String? = "시간 선택"
     private var g_content: String? = null
     private var g_matchId :String?= null
+
+    private var selectedItem: String? = null
+
+
 
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
@@ -50,7 +57,17 @@ class ApplyFragment : Fragment() {
         var btn_time = viewGroup!!.findViewById<View>(R.id.btn_time) as Button
         var edittext_content = viewGroup!!.findViewById<View>(R.id.edittext_content) as EditText
 
+        var sports_empty = viewGroup!!.findViewById<View>(R.id.apply_sports_empty) as TextView
+        var playtime_empty = viewGroup!!.findViewById<View>(R.id.apply_playtime_empty) as TextView
+        var totalNum_empty = viewGroup!!.findViewById<View>(R.id.apply_totalNum_empty) as TextView
+        var place_empty = viewGroup!!.findViewById<View>(R.id.apply_place_empty) as TextView
+
+
         var btn_apply = viewGroup!!.findViewById<View>(R.id.btn_apply) as Button
+
+
+
+
 
         val list = arrayOf<String>()
 
@@ -59,10 +76,23 @@ class ApplyFragment : Fragment() {
 
         var current_user = auth.currentUser!!
 
+        btn_event.text = (g_sport)
+
+        if(g_people != null){
+            btn_people.text = g_people.toString()
+        }
+
+        btn_place.text = g_place
+        btn_time.text = g_time
+
+        if(g_content != null)
+        edittext_content.setText(g_content)
+
+
         btn_event.setOnClickListener {
             //Toast.makeText(getActivity(), "~", Toast.LENGTH_LONG).show()
             val sports = arrayOf("테니스", "축구", "농구", "족구", "풋살")
-            var selectedItem: String? = null
+
 
             val builder = AlertDialog.Builder(activity)
                 .setTitle("종목을 선택하세요")
@@ -71,6 +101,9 @@ class ApplyFragment : Fragment() {
                 }
                 .setPositiveButton("확인") { dialog, which ->
                     g_sport = selectedItem.toString()
+                    if (g_sport == "null") {
+                        g_sport = "종목 선택"
+                    }
                     //Toast.makeText(getActivity(),g_sport, Toast.LENGTH_SHORT).show()
                     btn_event.text = g_sport
                 }
@@ -83,15 +116,23 @@ class ApplyFragment : Fragment() {
                 "13", "14", "15", "16", "17", "18", "19", "20", "21", "22")
             var selectedItem: String? = null
 
+
             val builder = AlertDialog.Builder(activity)
                 .setTitle("인원수를 선택하세요")
                 .setSingleChoiceItems(people, -1) { dialog, which ->
                     selectedItem = people[which]
                 }
                 .setPositiveButton("확인") { dialog, which ->
+
+                    if (selectedItem != null) {
+                        g_people = selectedItem?.toInt()
+                    }
+                    else{
+                        g_people = null
+                        selectedItem = "인원 선택"
+                    }
                     btn_people.text = selectedItem
-                    g_people = selectedItem!!.toInt()
-                    //Toast.makeText(getActivity(),g_people.toString(), Toast.LENGTH_SHORT).show()
+                //Toast.makeText(getActivity(),g_people.toString(), Toast.LENGTH_SHORT).show()
                 }
                 .show()
         }
@@ -110,6 +151,9 @@ class ApplyFragment : Fragment() {
                 .setPositiveButton("확인") { dialog, which ->
                     g_place = selectedItem.toString()
                     //Toast.makeText(getActivity(),g_sport, Toast.LENGTH_SHORT).show()
+                    if (g_place == "null") {
+                        g_place = "종목 선택"
+                    }
                     btn_place.text = g_place
                 }
                 .show()
@@ -145,10 +189,45 @@ class ApplyFragment : Fragment() {
         btn_apply.setOnClickListener {
             //Toast.makeText(activity,currentTime.toString(), Toast.LENGTH_SHORT).show()
 
-            g_content = edittext_content.getText().toString()
-            setMatchData(current_user)
-        }
+            var wrong_input = 0
 
+            if (g_sport == "종목 선택") {
+                wrong_input = 1
+                sports_empty.visibility = View.VISIBLE
+            }
+            else{
+                sports_empty.visibility = View.INVISIBLE
+            }
+
+            if (g_people == null) {
+                wrong_input = 1
+                totalNum_empty.visibility = View.VISIBLE
+            }
+            else{
+                totalNum_empty.visibility = View.INVISIBLE
+            }
+
+            if (g_time == "시간 선택") {
+                wrong_input = 1
+                playtime_empty.visibility = View.VISIBLE
+            }
+            else{
+                playtime_empty.visibility = View.INVISIBLE
+            }
+
+            if (g_place == "장소 선택") {
+                wrong_input = 1
+                place_empty.visibility = View.VISIBLE
+            }
+            else{
+                place_empty.visibility = View.INVISIBLE
+            }
+
+            if (wrong_input.equals(0)){
+                g_content = edittext_content.getText().toString()
+                setMatchData(current_user)
+            }
+        }
 
         return viewGroup
     }
@@ -212,6 +291,8 @@ class ApplyFragment : Fragment() {
         val dataFormat = SimpleDateFormat("yyyy-MM-dd")
         val date = dataFormat.format(currentTime)
         val time = timeFormat.format(currentTime)
+
+
 
         if (user != null) {
             MatchDTO.sports = g_sport
