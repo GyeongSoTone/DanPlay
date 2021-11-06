@@ -59,7 +59,7 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
 
         sports_list.add("테니스")
         sports_list.add("축구")
-        sports_list.add("야구")
+        sports_list.add("농구")
         sports_list.add("족구")
         sports_list.add("풋살")
 
