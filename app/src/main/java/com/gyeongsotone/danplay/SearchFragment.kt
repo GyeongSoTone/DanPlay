@@ -107,6 +107,7 @@ class SearchFragment : Fragment() {
         mapItem = mapItem.toSortedMap(reverseOrder())
         for (value in mapItem.values)
             listItem.add(0, value)
+
         return listItem
     }
     fun showList(listItem: ArrayList<ListViewModel>, day:String) {
