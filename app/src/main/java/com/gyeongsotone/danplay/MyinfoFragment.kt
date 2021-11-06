@@ -45,12 +45,13 @@ class MyinfoFragment : Fragment() {
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 var i = 0
+                var parent = dataSnapshot
                 for(snapshot in dataSnapshot.child("user").child(current_user.uid).child("matchId").children){
                     var my_match = snapshot.value.toString()
                     for(snapshot in dataSnapshot.child("match").children){
                         i = 1
                         if(snapshot.key.equals(my_match)){
-                            listItem = getMatchDb(snapshot) // 여기
+                            listItem = getMatchDb(snapshot, parent) // 여기
                             //getListView(listItem)
                         }
                     }
@@ -129,8 +130,7 @@ class MyinfoFragment : Fragment() {
         return viewGroup
     }
 
-    fun getMatchDb(it : DataSnapshot) : ArrayList<ListViewModel> {
-        //var mapItem = mutableMapOf<String, ListViewModel>()
+    fun getMatchDb(it : DataSnapshot, parent: DataSnapshot) : ArrayList<ListViewModel> {
         val local_listItem = arrayListOf<ListViewModel>()
         var sports : String
         var totalNum : String
@@ -143,9 +143,9 @@ class MyinfoFragment : Fragment() {
         var playDate : String
         var registrant : String
         var title : String
+        var name : String
 
-
-        currentNum = it.child("currentNum").value.toString()
+        currentNum = it.child("registrant").childrenCount.toString()
         totalNum = it.child("totalNum").value.toString()
         sports = it.child("sports").value.toString()
         playTimeDate = it.child("playTime").value.toString()
@@ -159,9 +159,10 @@ class MyinfoFragment : Fragment() {
         applyTime = it.child("applyTime").value.toString()
         place = it.child("place").value.toString()
         content = it.child("content").value.toString()
-        registrant = it.child("registrant").value.toString()
+        registrant = it.child("registrant").child("0").value.toString()
+        name = parent.child("user").child(registrant).child("name").value.toString()
         title = sports.plus(" | ${playDate} | ${playTime} | ${place} | ${currentNum}/${totalNum}")
-        mapItem.put(playTimeDate, ListViewModel(registrant, title, content))
+        mapItem.put(playTimeDate, ListViewModel(name, title, content))
 
         mapItem = mapItem.toSortedMap(reverseOrder())
         for (value in mapItem.values)
