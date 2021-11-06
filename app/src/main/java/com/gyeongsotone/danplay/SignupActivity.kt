@@ -247,7 +247,6 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
             // Insert timeStamp
             //UserDTO.timestamp = System.currentTimeMillis()
 
-            UserDTO.sex = user_sex
 
 
             matchId_init.add("-1")
