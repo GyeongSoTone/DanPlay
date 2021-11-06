@@ -7,6 +7,7 @@ import android.content.Intent
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.fragment.app.Fragment
@@ -161,6 +162,7 @@ class ApplyFragment : Fragment() {
             hexChars[i * 2] = digits[v shr 4]
             hexChars[i * 2 + 1] = digits[v and 0xf]
         }
+
         return String(hexChars)
     }
 
@@ -185,24 +187,22 @@ class ApplyFragment : Fragment() {
                 //Toast.makeText(activity, it.toString(), Toast.LENGTH_LONG).show()
                 var temp_matchId = ArrayList<String>()
                 temp_matchId = it.value as ArrayList<String>
-                temp_matchId.add(matchId)
 
-//                val temp2 = temp is ArrayList<*>
-//                Log.i("firebase", "$temp")
-//                Log.i("firebase", "$temp2")
-
+                if (temp_matchId[0].equals("-1")){
+                    temp_matchId.clear()
+                    temp_matchId.add(matchId)
+                }
+                else{
+                    temp_matchId.add(matchId)
+                }
                 database.child("user").child(user!!.uid).child("matchId").setValue(null)
                 database.child("user").child(user!!.uid).child("matchId").setValue(temp_matchId)
+
                 temp_matchId.clear()
             }.addOnFailureListener{
                 Toast.makeText(activity, "DB 읽기 실패", Toast.LENGTH_LONG).show()
             }
         }
-
-        //array_matchId.add(g_matchId.toString())
-        //Log.i("firebase", "$array_matchId")
-        //database.child("user").child(user!!.uid).child("matchId").setValue(array_matchId)
-        //array_matchId.clear()
     }
 
     private fun setMatchData(user: FirebaseUser?) {
@@ -220,6 +220,7 @@ class ApplyFragment : Fragment() {
             MatchDTO.content = g_content
 
             var temp_userId = ArrayList<String>()
+
             temp_userId.add(user.uid)
             MatchDTO.registrant = temp_userId
 
