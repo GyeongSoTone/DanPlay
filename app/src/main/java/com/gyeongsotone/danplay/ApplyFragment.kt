@@ -7,30 +7,20 @@ import android.content.Intent
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.os.Bundle
-import android.service.autofill.FieldClassification
-import android.util.Log
 import android.view.View
 import android.widget.*
-import android.widget.Toast.LENGTH_SHORT
 import androidx.fragment.app.Fragment
-import com.google.android.gms.common.util.Base64Utils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.gyeongsotone.danplay.databinding.ActivitySignupBinding
-import com.gyeongsotone.danplay.databinding.FragmentApplyBinding
 import com.gyeongsotone.danplay.model.MatchDTO
 import java.security.DigestException
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDate.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ApplyFragment : Fragment() {
@@ -43,15 +33,8 @@ class ApplyFragment : Fragment() {
     private var g_content: String? = null
     private var g_matchId :String?= null
 
-    private var array_matchId : ArrayList<String> = ArrayList()
-    //private var array_userId : ArrayList<Int> = ArrayList()
-
-
-
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -198,18 +181,28 @@ class ApplyFragment : Fragment() {
 
         if (user != null) {
             database.child("user").child(user.uid).child("matchId").get().addOnSuccessListener {
-                array_matchId.add(it.value as String)
-                Log.i("firebase", "Got value ${it.value}")
-                Log.i("firebase", "$array_matchId")
+                //array_matchId.add(it.value as String)
+                //Toast.makeText(activity, it.toString(), Toast.LENGTH_LONG).show()
+                var temp_matchId = ArrayList<String>()
+                temp_matchId = it.value as ArrayList<String>
+                temp_matchId.add(matchId)
+
+//                val temp2 = temp is ArrayList<*>
+//                Log.i("firebase", "$temp")
+//                Log.i("firebase", "$temp2")
+
+                database.child("user").child(user!!.uid).child("matchId").setValue(null)
+                database.child("user").child(user!!.uid).child("matchId").setValue(temp_matchId)
+                temp_matchId.clear()
             }.addOnFailureListener{
-                Toast.makeText(getActivity(), "DB 읽기 실패", Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, "DB 읽기 실패", Toast.LENGTH_LONG).show()
             }
         }
 
-        array_matchId.add(g_matchId.toString())
-        Log.i("firebase", "$array_matchId")
-        database.child("user").child(user!!.uid).child("matchId").setValue(array_matchId)
-        array_matchId.clear()
+        //array_matchId.add(g_matchId.toString())
+        //Log.i("firebase", "$array_matchId")
+        //database.child("user").child(user!!.uid).child("matchId").setValue(array_matchId)
+        //array_matchId.clear()
     }
 
     private fun setMatchData(user: FirebaseUser?) {
@@ -225,25 +218,25 @@ class ApplyFragment : Fragment() {
             MatchDTO.totalNum = g_people
             MatchDTO.place = g_place
             MatchDTO.content = g_content
-            MatchDTO.registrant = array_matchId
+
+            var temp_userId = ArrayList<String>()
+            temp_userId.add(user.uid)
+            MatchDTO.registrant = temp_userId
 
             MatchDTO.playTime = g_time
             MatchDTO.applyTime = date.toString() + ' ' + time.toString()
             g_matchId = hashSHA256(g_sport.plus(g_time.plus(g_place)))
 
-            Toast.makeText(activity,g_matchId, Toast.LENGTH_SHORT).show()
-
             database.child("match").child(g_matchId.toString()).setValue(MatchDTO)
-
-            moveMainPage(user, g_matchId.toString())
+            writeNewUser(user, g_matchId!!)
+            moveMainPage(user)
         }
     }
 
-    private fun moveMainPage(user: FirebaseUser?, matchId: String) {
+    private fun moveMainPage(user: FirebaseUser?) {
         if (user != null) {
-            Toast.makeText(activity, "매치 등록 완료되었습니다.", Toast.LENGTH_SHORT).show()
-            writeNewUser(user, matchId)
-            // 다음 페이지로 넘어가는 Intent
+            Toast.makeText(activity, "매치가 등록되었습니다!", Toast.LENGTH_SHORT).show()
+
         }
     }
 }
