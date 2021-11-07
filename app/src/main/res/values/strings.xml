@@ -11,6 +11,7 @@
     <string name="login_fail_msg">아이디 또는 비밀번호가 일치하지 않습니다.</string>
     <string name="login_forget_msg"><u>아이디 또는 비밀번호를 잊으셨나요?</u></string>
     <string name="join"><u>아직 회원이 아니신가요?</u></string>
+
     <string name="signup_id_duplicate">이미 존재하는 ID 입니다.</string>
     <string name="signup_password_fail">영문, 숫자 6자 이상의 비밀번호를 입력해주세요.</string>
     <string name="signup_password_check_fail">비밀번호가 일치하지 않습니다.</string>
@@ -18,4 +19,11 @@
     <string name="signup_name_fail">성함을 입력해주세요.</string>
     <string name="signup_birth_fail">올바른 형식의 날짜를 입력해주세요.</string>
     <string name="signup_prefer_fail">최소 1가지 종목을 골라주세요.</string>
+
+
+    <string name="apply_sports_empty">종목을 선택해주세요.</string>
+    <string name="apply_totalNum_empty">인원을 선택해주세요.</string>
+    <string name="apply_playtime_empty">시간을 선택해주세요.</string>
+    <string name="apply_place_empty">장소을 선택해주세요.</string>
+    <string name="apply_link"><u>예약 전, 클릭하여 단국대학교 시설물 현황을 확인해주세요!</u></string>
 </resources>
