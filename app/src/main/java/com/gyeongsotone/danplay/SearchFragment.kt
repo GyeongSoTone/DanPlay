@@ -68,7 +68,7 @@ class SearchFragment : Fragment() {
     }
 
     fun getMatchDb(it : DataSnapshot) : ArrayList<ListViewModel> {
-        var mapItem = mutableMapOf<String, ListViewModel>()
+        var mapItem = mutableMapOf<ListViewModel, String>()
         var listItem = arrayListOf<ListViewModel>()
         var sports : String
         var totalNum : String
@@ -103,11 +103,11 @@ class SearchFragment : Fragment() {
             registrant = it.child("match").child(mId.key.toString()).child("registrant").child("0").value.toString()
             registrant = it.child("user").child(registrant).child("name").value.toString()
             title = sports.plus(" | ${playDate} | ${playTime} | ${place} | ${currentNum}/${totalNum}")
-            mapItem.put(playTimeDate, ListViewModel(registrant, title, content, mId.key.toString()))
+            mapItem.put(ListViewModel(registrant, title, content, mId.key.toString()), playTimeDate)
         }
-        mapItem = mapItem.toSortedMap(reverseOrder())
-        for (value in mapItem.values)
-            listItem.add(0, value)
+        mapItem = mapItem.toList().sortedByDescending { it.second }.toMap().toMutableMap()
+        for (key in mapItem.keys)
+            listItem.add(0, key)
 
         return listItem
     }
