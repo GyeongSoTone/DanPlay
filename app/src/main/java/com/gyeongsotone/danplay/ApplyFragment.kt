@@ -277,8 +277,6 @@ class ApplyFragment : Fragment() {
 
         if (user != null) {
             database.child("user").child(user.uid).child("matchId").get().addOnSuccessListener {
-                //array_matchId.add(it.value as String)
-                //Toast.makeText(activity, it.toString(), Toast.LENGTH_LONG).show()
                 var temp_matchId = ArrayList<String>()
                 temp_matchId = it.value as ArrayList<String>
 
@@ -327,16 +325,13 @@ class ApplyFragment : Fragment() {
             database.child("match").child(g_matchId.toString()).setValue(MatchDTO)
             writeNewUser(user, g_matchId!!)
             Toast.makeText(activity, "매치가 등록되었습니다!", Toast.LENGTH_SHORT).show()
-
-            //moveMainPage(user)
+            moveMainPage()
         }
     }
 
-    private fun moveMainPage(user: FirebaseUser?) {
-        if (user != null) {
-
-
-        }
+    private fun moveMainPage() {
+        val intent = Intent(activity, MainActivity::class.java)
+        startActivity(intent)
     }
 
     private fun checkSameMatch(user: FirebaseUser?) {
