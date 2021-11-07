@@ -30,12 +30,13 @@ class ApplyFragment : Fragment() {
     private var g_sport: String? = null
     private var g_people: Int? = null
     private var g_place: String? = null
-    private var g_time: String? = null
+    private var g_playTime: String? = null
     private var g_content: String? = null
     private var g_matchId :String?= null
 
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
+    private lateinit var database2: DatabaseReference
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -125,15 +126,15 @@ class ApplyFragment : Fragment() {
 
             var listener1 = DatePickerDialog.OnDateSetListener { datePicker, i, i2, i3 ->
                 year = i
-                month = i2
+                month = i2 + 1
                 day = i3
 
                 var listener2 = TimePickerDialog.OnTimeSetListener { timePicker, i, i2 ->
                     hour = i
                     minute = i2
 
-                    g_time = "%d-%02d-%02d %02d:%02d:00".format(year, month, day, i, i2)
-                    btn_time.text = g_time
+                    g_playTime = "%d-%02d-%02d %02d:%02d:00".format(year, month, day, i, i2)
+                    btn_time.text = g_playTime
                 }
                 var picker2 = TimePickerDialog(activity, listener2, hour, minute, false ) // true하면 24시간 제
                 picker2.show()
@@ -144,9 +145,18 @@ class ApplyFragment : Fragment() {
 
         btn_apply.setOnClickListener {
             //Toast.makeText(activity,currentTime.toString(), Toast.LENGTH_SHORT).show()
-
-            g_content = edittext_content.getText().toString()
-            setMatchData(current_user)
+            checkSameMatch(current_user)
+//
+//            if(checkSameMatch(current_user)){ // 문제 있을때
+//                Log.d("fire", "Heloo1!")
+//                Toast.makeText(activity, "동일한 매치가 예약되어있습니다!", Toast.LENGTH_LONG).show()
+//            }
+//            else{ // 문제 없을 경우
+//                Log.d("fire", "Heloo2!")
+//                g_content = edittext_content.getText().toString()
+//                setMatchData(current_user)
+//            }
+//            Log.d("fire", "Heloo3!")
         }
 
 
@@ -224,19 +234,44 @@ class ApplyFragment : Fragment() {
             temp_userId.add(user.uid)
             MatchDTO.registrant = temp_userId
 
-            MatchDTO.playTime = g_time
+            MatchDTO.playTime = g_playTime
             MatchDTO.applyTime = date.toString() + ' ' + time.toString()
-            g_matchId = hashSHA256(g_sport.plus(g_time.plus(g_place)))
+            g_matchId = hashSHA256(g_sport.plus(g_playTime.plus(g_place)))
 
-            database.child("match").child(g_matchId.toString()).setValue(MatchDTO)
-            writeNewUser(user, g_matchId!!)
-            moveMainPage(user)
+            //database.child("match").child(g_matchId.toString()).setValue(MatchDTO)
+            Toast.makeText(activity, "매치가 등록되었습니다!", Toast.LENGTH_SHORT).show()
+            //writeNewUser(user, g_matchId!!)
+            //moveMainPage(user)
         }
     }
 
     private fun moveMainPage(user: FirebaseUser?) {
         if (user != null) {
-            Toast.makeText(activity, "매치가 등록되었습니다!", Toast.LENGTH_SHORT).show()
+
+
+        }
+    }
+
+    private fun checkSameMatch(user: FirebaseUser?) {
+        if (user != null) {
+            database.child("match").get().addOnSuccessListener { it ->
+                var sign = false
+                for (match in it.children) {
+                    val sports = match.child("sports").value.toString()
+                    val playTime = match.child("playTime").value.toString()
+                    val place = match.child("place").value.toString()
+                    if (g_sport.equals(sports) and g_playTime.equals(playTime) and g_place.equals(place)){
+                        sign = true
+                        break
+                    }
+                }
+                if (sign) {
+                    Toast.makeText(activity, "동일한 매치가 존재합니다!", Toast.LENGTH_LONG).show()
+                }
+                else {
+                    setMatchData(user)
+                }
+            }.addOnFailureListener {}
 
         }
     }
