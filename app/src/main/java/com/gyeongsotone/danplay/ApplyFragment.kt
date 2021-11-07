@@ -4,9 +4,13 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.graphics.PointF.length
+import android.net.Uri
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.os.Bundle
+import android.text.Selection.setSelection
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -27,12 +31,16 @@ import kotlin.collections.ArrayList
 class ApplyFragment : Fragment() {
     var viewGroup: ViewGroup? = null
 
-    private var g_sport: String? = null
+    private var g_sport: String? = "종목 선택"
     private var g_people: Int? = null
-    private var g_place: String? = null
-    private var g_time: String? = null
+    private var g_place: String? = "장소 선택"
+    private var g_playTime: String? = "시간 선택"
     private var g_content: String? = null
     private var g_matchId :String?= null
+
+    private var selectedItem: String? = null
+
+
 
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
@@ -50,7 +58,21 @@ class ApplyFragment : Fragment() {
         var btn_time = viewGroup!!.findViewById<View>(R.id.btn_time) as Button
         var edittext_content = viewGroup!!.findViewById<View>(R.id.edittext_content) as EditText
 
+        var sports_empty = viewGroup!!.findViewById<View>(R.id.apply_sports_empty) as TextView
+        var playtime_empty = viewGroup!!.findViewById<View>(R.id.apply_playtime_empty) as TextView
+        var totalNum_empty = viewGroup!!.findViewById<View>(R.id.apply_totalNum_empty) as TextView
+        var place_empty = viewGroup!!.findViewById<View>(R.id.apply_place_empty) as TextView
+        var url = viewGroup!!.findViewById<View>(R.id.url) as TextView
+        var apply_msg = viewGroup!!.findViewById<View>(R.id.apply_btn_msg) as TextView
+
         var btn_apply = viewGroup!!.findViewById<View>(R.id.btn_apply) as Button
+
+        url.setOnClickListener {
+            var intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://webinfo.dankook.ac.kr/tiad/admi/faci/usem/views/findFacsUseApWeblList.do?_view=ok"))
+            startActivity(intent)
+        }
+
+
 
         val list = arrayOf<String>()
 
@@ -59,10 +81,23 @@ class ApplyFragment : Fragment() {
 
         var current_user = auth.currentUser!!
 
+        btn_event.text = (g_sport)
+
+        if(g_people != null){
+            btn_people.text = g_people.toString()
+        }
+
+        btn_place.text = g_place
+        btn_time.text = g_playTime
+
+        if(g_content != null)
+        edittext_content.setText(g_content)
+
+
         btn_event.setOnClickListener {
             //Toast.makeText(getActivity(), "~", Toast.LENGTH_LONG).show()
             val sports = arrayOf("테니스", "축구", "농구", "족구", "풋살")
-            var selectedItem: String? = null
+
 
             val builder = AlertDialog.Builder(activity)
                 .setTitle("종목을 선택하세요")
@@ -71,6 +106,9 @@ class ApplyFragment : Fragment() {
                 }
                 .setPositiveButton("확인") { dialog, which ->
                     g_sport = selectedItem.toString()
+                    if (g_sport == "null") {
+                        g_sport = "종목 선택"
+                    }
                     //Toast.makeText(getActivity(),g_sport, Toast.LENGTH_SHORT).show()
                     btn_event.text = g_sport
                 }
@@ -83,15 +121,23 @@ class ApplyFragment : Fragment() {
                 "13", "14", "15", "16", "17", "18", "19", "20", "21", "22")
             var selectedItem: String? = null
 
+
             val builder = AlertDialog.Builder(activity)
                 .setTitle("인원수를 선택하세요")
                 .setSingleChoiceItems(people, -1) { dialog, which ->
                     selectedItem = people[which]
                 }
                 .setPositiveButton("확인") { dialog, which ->
+
+                    if (selectedItem != null) {
+                        g_people = selectedItem?.toInt()
+                    }
+                    else{
+                        g_people = null
+                        selectedItem = "인원 선택"
+                    }
                     btn_people.text = selectedItem
-                    g_people = selectedItem!!.toInt()
-                    //Toast.makeText(getActivity(),g_people.toString(), Toast.LENGTH_SHORT).show()
+                //Toast.makeText(getActivity(),g_people.toString(), Toast.LENGTH_SHORT).show()
                 }
                 .show()
         }
@@ -110,6 +156,9 @@ class ApplyFragment : Fragment() {
                 .setPositiveButton("확인") { dialog, which ->
                     g_place = selectedItem.toString()
                     //Toast.makeText(getActivity(),g_sport, Toast.LENGTH_SHORT).show()
+                    if (g_place == "null") {
+                        g_place = "종목 선택"
+                    }
                     btn_place.text = g_place
                 }
                 .show()
@@ -125,15 +174,15 @@ class ApplyFragment : Fragment() {
 
             var listener1 = DatePickerDialog.OnDateSetListener { datePicker, i, i2, i3 ->
                 year = i
-                month = i2
+                month = i2 + 1
                 day = i3
 
                 var listener2 = TimePickerDialog.OnTimeSetListener { timePicker, i, i2 ->
                     hour = i
                     minute = i2
 
-                    g_time = "%d-%02d-%02d %02d:%02d:00".format(year, month, day, i, i2)
-                    btn_time.text = g_time
+                    g_playTime = "%d-%02d-%02d %02d:%02d:00".format(year, month, day, i, i2)
+                    btn_time.text = g_playTime
                 }
                 var picker2 = TimePickerDialog(activity, listener2, hour, minute, false ) // true하면 24시간 제
                 picker2.show()
@@ -145,10 +194,55 @@ class ApplyFragment : Fragment() {
         btn_apply.setOnClickListener {
             //Toast.makeText(activity,currentTime.toString(), Toast.LENGTH_SHORT).show()
 
-            g_content = edittext_content.getText().toString()
-            setMatchData(current_user)
-        }
+            var wrong_input = 0
 
+            if (g_sport == "종목 선택") {
+                wrong_input = 1
+                sports_empty.visibility = View.VISIBLE
+            }
+            else{
+                sports_empty.visibility = View.INVISIBLE
+            }
+
+            if (g_people == null) {
+                wrong_input = 1
+                totalNum_empty.visibility = View.VISIBLE
+            }
+            else{
+                totalNum_empty.visibility = View.INVISIBLE
+            }
+
+            if (g_playTime == "시간 선택") {
+                wrong_input = 1
+                playtime_empty.visibility = View.VISIBLE
+            }
+            else{
+                playtime_empty.visibility = View.INVISIBLE
+            }
+
+            if (g_place == "장소 선택") {
+                wrong_input = 1
+                place_empty.visibility = View.VISIBLE
+            }
+            else{
+                place_empty.visibility = View.INVISIBLE
+            }
+
+            g_content = edittext_content.getText().toString()
+            if (g_content == ""){
+                wrong_input = 1
+                apply_msg.text = "내용을 입력해주세요"
+                apply_msg.visibility = View.VISIBLE
+            }
+            else{
+                apply_msg.visibility = View.INVISIBLE
+            }
+
+            if (wrong_input.equals(0)){
+
+                checkSameMatch(current_user)
+            }
+        }
 
         return viewGroup
     }
@@ -213,6 +307,8 @@ class ApplyFragment : Fragment() {
         val date = dataFormat.format(currentTime)
         val time = timeFormat.format(currentTime)
 
+
+
         if (user != null) {
             MatchDTO.sports = g_sport
             MatchDTO.totalNum = g_people
@@ -224,19 +320,67 @@ class ApplyFragment : Fragment() {
             temp_userId.add(user.uid)
             MatchDTO.registrant = temp_userId
 
-            MatchDTO.playTime = g_time
+            MatchDTO.playTime = g_playTime
             MatchDTO.applyTime = date.toString() + ' ' + time.toString()
-            g_matchId = hashSHA256(g_sport.plus(g_time.plus(g_place)))
+            g_matchId = hashSHA256(g_sport.plus(g_playTime.plus(g_place)))
 
             database.child("match").child(g_matchId.toString()).setValue(MatchDTO)
             writeNewUser(user, g_matchId!!)
-            moveMainPage(user)
+            Toast.makeText(activity, "매치가 등록되었습니다!", Toast.LENGTH_SHORT).show()
+
+            //moveMainPage(user)
         }
     }
 
     private fun moveMainPage(user: FirebaseUser?) {
         if (user != null) {
-            Toast.makeText(activity, "매치가 등록되었습니다!", Toast.LENGTH_SHORT).show()
+
+
+        }
+    }
+
+    private fun checkSameMatch(user: FirebaseUser?) {
+        if (user != null) {
+            database.get().addOnSuccessListener { it ->
+                var sign = false
+                var apply_msg = viewGroup!!.findViewById<View>(R.id.apply_btn_msg) as TextView
+
+                for (match in it.child("match").children) {
+                    val sports = match.child("sports").value.toString()
+                    val playTime = match.child("playTime").value.toString()
+                    val place = match.child("place").value.toString()
+                    if (g_sport.equals(sports) and g_playTime.equals(playTime) and g_place.equals(place)){
+                        sign = true
+                        break
+                    }
+                }
+                if (sign) {
+                    apply_msg.text = "동일한 조건의 매치가 존재합니다. 조회를 통해 예약해주세요!"
+                    apply_msg.visibility = View.VISIBLE
+                }
+                else {
+                    var matchId = ArrayList<String>()
+                    matchId = it.child("user").child(user.uid).child("matchId").value as ArrayList<String>
+
+                    for(current_matchId in matchId){
+                        if(current_matchId == "-1"){
+                            break
+                        }
+                        else if(it.child("match").child(current_matchId).child("playTime").value.toString() == g_playTime){
+                            sign = true
+                            break
+                        }
+                    }
+                    if(sign){
+                        apply_msg.text = "동일한 시간에 예약이 존재합니다. 예약을 확인해주세요!"
+                        apply_msg.visibility = View.VISIBLE
+                    }
+                    else{
+                        setMatchData(user)
+                        apply_msg.visibility = View.INVISIBLE
+                    }
+                }
+            }.addOnFailureListener {}
 
         }
     }
