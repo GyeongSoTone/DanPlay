@@ -58,7 +58,7 @@ class MyinfoFragment : Fragment() {
                 }
                 if(i == 0){
                     listItem.clear()
-                    listItem.add(0, ListViewModel("", "", "예약된 매치 없음"))
+                    listItem.add(0, ListViewModel("", "", "예약된 매치 없음", ""))
                 }
                 getListView(listItem)
             }
@@ -162,7 +162,7 @@ class MyinfoFragment : Fragment() {
         registrant = it.child("registrant").child("0").value.toString()
         name = parent.child("user").child(registrant).child("name").value.toString()
         title = sports.plus(" | ${playDate} | ${playTime} | ${place} | ${currentNum}/${totalNum}")
-        mapItem.put(playTimeDate, ListViewModel(name, title, content))
+        mapItem.put(playTimeDate, ListViewModel(name, title, content, ""))
 
         mapItem = mapItem.toSortedMap(reverseOrder())
         for (value in mapItem.values)
