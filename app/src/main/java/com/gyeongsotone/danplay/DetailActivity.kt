@@ -57,8 +57,41 @@ class DetailActivity : AppCompatActivity() {
 
              이전 페이지로 이동 (인원수 업데이트 되어야 함)
             */
-            writeNewUser(current_user, matchId)
-
+            if (number.text.split("/")[0] == number.text.split("/")[1]) {
+                Toast.makeText(this, "매치 허용 인원이 가득 찼습니다.", Toast.LENGTH_LONG).show()
+            }
+            else {
+                database.get().addOnSuccessListener {
+                    var flag = 0
+                    for (idx in 0 until it.child("match").child(matchId).child("registrant").childrenCount.toInt()) {
+                        // 참여하려는 매치의 registrant에 자신이 이미 포함되어 있을 때
+                        if ((it.child("match").child(matchId).child("registrant").child(idx.toString()).value) == current_user.uid) {
+                            Toast.makeText(this, "이미 참여한 매치입니다.", Toast.LENGTH_LONG).show()
+                            flag = 1
+                            break
+                        }
+                    }
+                    if (flag == 0) {
+                        var arrayMyMatch = it.child("user").child(current_user.uid).child("matchId")
+                        // 참여하려는 매치의 시간과 내 매치 시간이 동일한 것이 있을 때
+                        for (userMatchId in arrayMyMatch.children) {
+                            for (mId in it.child("match").children) {
+                                if (it.child("match").child(mId.key.toString()).child("playTime").value.toString() ==
+                                    it.child("match").child(matchId).child("playTime").value.toString()) {
+                                    Toast.makeText(this, "이미 다른 매치에 참여하고 있습니다.", Toast.LENGTH_LONG).show()
+                                    flag = 1
+                                    break
+                                }
+                                if (flag == 1)
+                                    break
+                            }
+                        }
+                    }
+                    if (flag == 0) {
+                        writeNewUser(current_user, matchId)
+                    }
+                }
+            }
         }
 
     }
@@ -76,9 +109,10 @@ class DetailActivity : AppCompatActivity() {
                     database.child("user").child(user!!.uid).child("matchId").child(myMatchNum.toString()).setValue(matchId)
                     database.child("match").child(matchId).child("registrant").child(matchUserNum.toString()).setValue(user!!.uid)
                 }
+                Toast.makeText(this,"매치 참여 성공!", Toast.LENGTH_LONG).show()
                 // fragment로 화면전환
-                val intent = Intent(SearchFragment().context, MainActivity::class.java)
-                startActivity(intent)
+//                val intent = Intent(SearchFragment().context, MainActivity::class.java)
+//                startActivity(intent)
             }.addOnFailureListener{
                 Toast.makeText(this, "DB 읽기 실패", Toast.LENGTH_LONG).show()
             }
