@@ -76,15 +76,24 @@ class DetailActivity : AppCompatActivity() {
                         // 참여하려는 매치의 시간과 내 매치 시간이 동일한 것이 있을 때
                         for (userMatchId in arrayMyMatch.children) {
                             for (mId in it.child("match").children) {
-                                if (it.child("match").child(mId.key.toString()).child("playTime").value.toString() ==
-                                    it.child("match").child(matchId).child("playTime").value.toString()) {
-                                    Toast.makeText(this, "이미 다른 매치에 참여하고 있습니다.", Toast.LENGTH_LONG).show()
-                                    flag = 1
-                                    break
+                                if (mId.key.toString() == userMatchId.value.toString()) {
+                                    if (it.child("match").child(mId.key.toString())
+                                            .child("playTime").value.toString() ==
+                                        it.child("match").child(matchId)
+                                            .child("playTime").value.toString()
+                                    ) {
+                                        Toast.makeText(
+                                            this,
+                                            "이미 다른 매치에 참여하고 있습니다.",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                        flag = 1
+                                        break
+                                    }
                                 }
-                                if (flag == 1)
-                                    break
                             }
+                            if (flag == 1)
+                                break
                         }
                     }
                     if (flag == 0) {
