@@ -20,7 +20,7 @@
 
 <br>
 
-## :family: Contributors (2021/05/24 ~ 2021/07/03)
+## :family: Contributors (2021/09/11 ~ 2021/11/15)
 <table>
   <tr>
     <th>김홍덕</th><th><a href="https://github.com/HongdeokKim">@HongdeokKim</a></th>
