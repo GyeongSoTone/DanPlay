@@ -117,10 +117,8 @@ class DetailActivity : AppCompatActivity() {
                 }
                 Toast.makeText(this,"매치 참여 성공!", Toast.LENGTH_LONG).show()
                 // fragment로 화면전환
-                var searchFragment: SearchFragment? = null
-                searchFragment = SearchFragment()
-                supportFragmentManager.beginTransaction().replace(R.id.main_layout, searchFragment!!)
-                    .commitAllowingStateLoss()
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
             }.addOnFailureListener{
                 Toast.makeText(this, "DB 읽기 실패", Toast.LENGTH_LONG).show()
             }
