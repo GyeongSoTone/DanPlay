@@ -1,22 +1,19 @@
 package com.gyeongsotone.danplay
 
+import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.gyeongsotone.danplay.databinding.ActivityDetailBinding
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import com.google.android.material.navigation.NavigationBarView
-import com.gyeongsotone.danplay.databinding.FragmentSearchBinding
 
 
 class DetailActivity : AppCompatActivity() {
@@ -32,7 +29,6 @@ class DetailActivity : AppCompatActivity() {
         mBinding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var current_user = auth.currentUser!!
         var participationMsg = binding.participationBtnMsg
         var name = binding.textviewName
         var sports = binding.textviewSports
@@ -40,9 +36,8 @@ class DetailActivity : AppCompatActivity() {
         var time = binding.textviewTime
         var place = binding.textviewPlace
         var content = binding.textviewContent
-        var button = binding.buttonParticipation
+        var participationButton = binding.buttonParticipation
         val match = intent.getSerializableExtra("matchInfo") as ListViewModel
-        val matchId = intent.getSerializableExtra("matchId") as String
         name.text = match.name
         var listStrTitle = match.title.split("|")
         sports.text = listStrTitle[0].trim()
@@ -51,54 +46,75 @@ class DetailActivity : AppCompatActivity() {
         place.text = listStrTitle[3].trim()
         content.text = match.content
 
-        button.setOnClickListener {
-            if (number.text.split("/")[0] == number.text.split("/")[1]) {
-                Toast.makeText(this, "매치 허용 인원이 가득 찼습니다.", Toast.LENGTH_LONG).show()
-            }
-            else {
+        participationButton.setOnClickListener {
+            val alert_cancel = AlertDialog.Builder(this)
+            alert_cancel.setMessage("정말로 매치에 참가하시겠습니까?")
+            // 확인버튼
+            alert_cancel.setPositiveButton("확인") { dialog, which ->
                 database.get().addOnSuccessListener {
-                    var flag = 0
-                    for (idx in 0 until it.child("match").child(matchId).child("registrant").childrenCount.toInt()) {
-                        // 참여하려는 매치의 registrant에 자신이 이미 포함되어 있을 때
-                        if ((it.child("match").child(matchId).child("registrant").child(idx.toString()).value) == current_user.uid) {
-                            participationMsg.text = "이미 참여한 매치입니다."
+                    if (number.text.split("/")[0] == number.text.split("/")[1]) {
+                        participationMsg.text = "매치 허용 인원이 가득 찼습니다."
+                        participationMsg.visibility = View.VISIBLE
+                    } else {
+                        database.get().addOnSuccessListener {
+                            participateMatch(it, participationMsg)
+                        }
+                    }
+                }.addOnFailureListener{
+                    Toast.makeText(this, "DB 읽기 실패", Toast.LENGTH_LONG).show()
+                }
+            }
+            // 취소버튼
+            alert_cancel.setNegativeButton("취소", null)
+            val alert = alert_cancel.create()
+            alert.setIcon(R.drawable.logo_danplay)
+            alert.setTitle("매치 참가")
+            alert.show()
+
+        }
+    }
+
+    private fun participateMatch(it:DataSnapshot, participationMsg: TextView) {
+        val matchId = intent.getSerializableExtra("matchId") as String
+        var currentUser = auth.currentUser!!
+
+        var flag = 0
+        for (mId in it.child("match").child(matchId).child("registrant").children) {
+            if (mId.value.toString().equals(currentUser.uid)) {
+                participationMsg.text = "이미 참여한 매치입니다."
+                participationMsg.visibility = View.VISIBLE
+                flag = 1
+                break
+            }
+        }
+        if (flag == 0) {
+            var arrayMyMatch = it.child("user").child(currentUser.uid).child("matchId")
+            // 참여하려는 매치의 시간과 내 매치 시간이 동일한 것이 있을 때
+            for (userMatchId in arrayMyMatch.children) {
+                for (mId in it.child("match").children) {
+                    if (mId.key.toString() == userMatchId.value.toString()) {
+                        if (it.child("match").child(mId.key.toString())
+                                .child("playTime").value.toString() ==
+                            it.child("match").child(matchId)
+                                .child("playTime").value.toString()
+                        ) {
+                            participationMsg.text = "동일한 시간에 예약이 존재합니다. 예약을 확인해주세요!"
                             participationMsg.visibility = View.VISIBLE
                             flag = 1
                             break
                         }
                     }
-                    if (flag == 0) {
-                        var arrayMyMatch = it.child("user").child(current_user.uid).child("matchId")
-                        // 참여하려는 매치의 시간과 내 매치 시간이 동일한 것이 있을 때
-                        for (userMatchId in arrayMyMatch.children) {
-                            for (mId in it.child("match").children) {
-                                if (mId.key.toString() == userMatchId.value.toString()) {
-                                    if (it.child("match").child(mId.key.toString())
-                                            .child("playTime").value.toString() ==
-                                        it.child("match").child(matchId)
-                                            .child("playTime").value.toString()
-                                    ) {
-                                        participationMsg.text = "동일한 시간에 예약이 존재합니다. 예약을 확인해주세요!"
-                                        participationMsg.visibility = View.VISIBLE
-                                        flag = 1
-                                        break
-                                    }
-                                }
-                            }
-                            if (flag == 1)
-                                break
-                        }
-                    }
-                    if (flag == 0) {
-                        writeNewUser(current_user, matchId)
-                    }
                 }
+                if (flag == 1)
+                    break
             }
         }
-
+        if (flag == 0) {
+            writeNewUser(currentUser, matchId)
+        }
     }
 
-    fun writeNewUser(user: FirebaseUser?, matchId: String) {
+    private fun writeNewUser(user: FirebaseUser?, matchId: String) {
 
         if (user != null) {
             database.get().addOnSuccessListener {
