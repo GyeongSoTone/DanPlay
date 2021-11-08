@@ -174,5 +174,12 @@ class MyinfoFragment : Fragment() {
         val listview = viewGroup!!.findViewById<ListView>(R.id.mymatchListView)
         val listviewAdapter = ListViewAdapter(listItem)
         listview.adapter = listviewAdapter
+        listview.setOnItemClickListener{ parent, view, position, id ->
+            val clickedList = listItem[position]
+            val intent = Intent(requireActivity().applicationContext, MyMatchDetailActivity::class.java)
+            intent.putExtra("matchInfo", clickedList)
+            intent.putExtra("matchId", clickedList.matchId)
+            startActivity(intent)
+        }
     }
 }
