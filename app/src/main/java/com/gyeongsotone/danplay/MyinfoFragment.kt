@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ListView
@@ -162,7 +163,7 @@ class MyinfoFragment : Fragment() {
         registrant = it.child("registrant").child("0").value.toString()
         name = parent.child("user").child(registrant).child("name").value.toString()
         title = sports.plus(" | ${playDate} | ${playTime} | ${place} | ${currentNum}/${totalNum}")
-        mapItem.put(playTimeDate, ListViewModel(name, title, content, ""))
+        mapItem.put(playTimeDate, ListViewModel(name, title, content, it.key.toString()))
 
         mapItem = mapItem.toSortedMap(reverseOrder())
         for (value in mapItem.values)

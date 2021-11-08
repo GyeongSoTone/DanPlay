@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -22,7 +23,6 @@ import com.google.firebase.database.ValueEventListener
 class MyMatchDetailActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
-    var fragment1: MyinfoFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +32,6 @@ class MyMatchDetailActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         var current_user = auth.currentUser!!
-        //var registrant = database.child("registrant").child("0").get()
         var name = findViewById<View>(R.id.textview_name) as TextView
         var sports = findViewById<View>(R.id.textview_sports) as TextView
         var number = findViewById<View>(R.id.textview_number) as TextView
@@ -56,6 +55,7 @@ class MyMatchDetailActivity : AppCompatActivity() {
             // 확인버튼
             alert_cancel.setPositiveButton("확인") { dialog, which ->
                 database.get().addOnSuccessListener {
+                    Log.i("####", "matchID: ${matchId}")
                     deleteMatch(it, matchId, current_user)
                 }.addOnFailureListener{
                     Toast.makeText(this, "DB 읽기 실패", Toast.LENGTH_LONG).show()
@@ -71,14 +71,10 @@ class MyMatchDetailActivity : AppCompatActivity() {
     }
 
     fun deleteMatch(it: DataSnapshot, matchId: String, current_user: FirebaseUser){
-        //database = Firebase.database.reference
         var i = 0
         for(snapshot in it.child("match").child(matchId).child("registrant").children){
-            Toast.makeText(this, "for문 들어옴", Toast.LENGTH_LONG).show()
             if(snapshot.value.toString().equals(current_user.uid)){
-                Toast.makeText(this, "첫번째 if문 들옴", Toast.LENGTH_LONG).show()
                 if(i == 0){
-                    Toast.makeText(this, "i=0 break", Toast.LENGTH_LONG).show()
                     break
                 }
                 database.child("match").child(matchId).child("registrant").child(snapshot.key.toString()).removeValue()
@@ -95,10 +91,9 @@ class MyMatchDetailActivity : AppCompatActivity() {
                 }
             }
             Toast.makeText(this, "매치취소 완료", Toast.LENGTH_LONG).show()
-            val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-            fragment1 = MyinfoFragment() // 객체 생성
-            transaction.replace(R.id.my_match_detail_layout, fragment1!!) //layout, 교체될 layout
-            transaction.commit() //commit으로 저장 하지 않으면 화면 전환이 되지 않음
+
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
     }
 }
