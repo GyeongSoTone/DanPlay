@@ -120,32 +120,8 @@ class MainpageFragment : Fragment() {
             "축구" -> btn_sports.setImageResource(R.drawable.soccer)
             "농구" -> btn_sports.setImageResource(R.drawable.basket)
             "족구" -> btn_sports.setImageResource(R.drawable.jokgoo)
-            "풋살" -> btn_sports.setImageResource(R.drawable.logo_danplay)
+            "풋살" -> btn_sports.setImageResource(R.drawable.futsal)
             else -> null
         }
     }
 }
-
-/*
-        btn_sports1.setOnClickListener {
-            val intent = Intent(requireActivity().applicationContext, SignupActivity::class.java)
-            startActivity(intent)
-        }
-        btn_sports2.setOnClickListener {
-           btn_sports2.setImageResource(R.drawable.soccer)
-        }
- */
-/*database.child("user").child(current_user.uid).get().addOnSuccessListener {
-          name.setText("${it.child("name").value}")
-          text_sports1.setText("${it.child("preference").child("0").value}")
-          text_sports2.setText("${it.child("preference").child("1").value}")
-          text_sports3.setText("${it.child("preference").child("2").value}")
-          text_sports4.setText("${it.child("preference").child("3").value}")
-
-          setImage(text_sports1, btn_sports1)
-          setImage(text_sports2, btn_sports2)
-          setImage(text_sports3, btn_sports3)
-          setImage(text_sports4, btn_sports4)
-      }.addOnFailureListener{
-          Toast.makeText(getActivity(), "DB 읽기 실패", Toast.LENGTH_LONG).show()
-      }*/
