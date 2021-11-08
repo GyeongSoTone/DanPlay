@@ -1,6 +1,6 @@
-# :soccer: DanPlay :tennis:
-'__DanPlay__'는 단국대학교 (죽전) 내에서 사용 가능한 스포츠 매칭 어플입니다. (출시 예정)<br>
-[공모전 링크 바로가기](https://gyeongsotone.creatorlink.net/)
+<img width="200" alt="techstack" src="https://user-images.githubusercontent.com/70425484/140725489-3f7e1c6c-2214-41d7-9098-fbe659154cf0.png"> <br>
+- '__DanPlay__'는 단국대학교 (죽전) 내에서 사용 가능한 스포츠 매칭 어플입니다. (출시 예정)<br>
+- [공모전 링크 바로가기](https://gyeongsotone.creatorlink.net/)
 
 <br>
 
