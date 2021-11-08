@@ -84,10 +84,8 @@ class SearchFragment : Fragment() {
         for (mId in it.child("match").children) {
             currentNum = it.child("match").child(mId.key.toString()).child("registrant").childrenCount.toString()
             totalNum = it.child("match").child(mId.key.toString()).child("totalNum").value.toString()
-            if (totalNum == currentNum) {
-                Toast.makeText(context, "인원이 가득 찼습니다.", Toast.LENGTH_LONG).show()
+            if (totalNum == currentNum)
                 continue
-            }
             sports = it.child("match").child(mId.key.toString()).child("sports").value.toString()
             playTimeDate = it.child("match").child(mId.key.toString()).child("playTime").value.toString()
             if (playTimeDate.split(" ").size == 2) {
