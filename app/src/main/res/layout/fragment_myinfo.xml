@@ -144,8 +144,9 @@
                 <ListView
                     android:id="@+id/mymatchListView"
                     android:layout_width="match_parent"
-                    android:layout_height="225dp"/>
-                    //android:layout_marginLeft="10dp"/>
+                    android:layout_height="225dp"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"/>
             </LinearLayout>
         </ScrollView>
 

@@ -31,12 +31,12 @@ import kotlin.collections.ArrayList
 class ApplyFragment : Fragment() {
     var viewGroup: ViewGroup? = null
 
-    private var g_sport: String? = "종목 선택"
-    private var g_people: Int? = null
-    private var g_place: String? = "장소 선택"
-    private var g_playTime: String? = "시간 선택"
-    private var g_content: String? = null
-    private var g_matchId :String?= null
+    private var gSport: String? = "종목 선택"
+    private var gPeople: Int? = null
+    private var gPlace: String? = "장소 선택"
+    private var gPlayTime: String? = "시간 선택"
+    private var gContent: String? = null
+    private var gMatchId :String?= null
 
     private var selectedItem: String? = null
 
@@ -52,20 +52,20 @@ class ApplyFragment : Fragment() {
     ): View? {
         viewGroup = inflater.inflate(R.layout.fragment_apply, container, false) as ViewGroup
 
-        var btn_event = viewGroup!!.findViewById<View>(R.id.btn_event) as Button
-        var btn_people = viewGroup!!.findViewById<View>(R.id.btn_people) as Button
-        var btn_place = viewGroup!!.findViewById<View>(R.id.btn_where) as Button
-        var btn_time = viewGroup!!.findViewById<View>(R.id.btn_time) as Button
-        var edittext_content = viewGroup!!.findViewById<View>(R.id.edittext_content) as EditText
+        var btnEvent = viewGroup!!.findViewById<View>(R.id.btn_event) as Button
+        var btnPeople = viewGroup!!.findViewById<View>(R.id.btn_people) as Button
+        var btnPlace = viewGroup!!.findViewById<View>(R.id.btn_where) as Button
+        var btnTime = viewGroup!!.findViewById<View>(R.id.btn_time) as Button
+        var edittextContent = viewGroup!!.findViewById<View>(R.id.edittext_content) as EditText
 
-        var sports_empty = viewGroup!!.findViewById<View>(R.id.apply_sports_empty) as TextView
-        var playtime_empty = viewGroup!!.findViewById<View>(R.id.apply_playtime_empty) as TextView
-        var totalNum_empty = viewGroup!!.findViewById<View>(R.id.apply_totalNum_empty) as TextView
-        var place_empty = viewGroup!!.findViewById<View>(R.id.apply_place_empty) as TextView
+        var sportsEmpty = viewGroup!!.findViewById<View>(R.id.apply_sports_empty) as TextView
+        var playtimeEmpty = viewGroup!!.findViewById<View>(R.id.apply_playtime_empty) as TextView
+        var totalNumEmpty = viewGroup!!.findViewById<View>(R.id.apply_totalNum_empty) as TextView
+        var placeEmpty = viewGroup!!.findViewById<View>(R.id.apply_place_empty) as TextView
         var url = viewGroup!!.findViewById<View>(R.id.url) as TextView
-        var apply_msg = viewGroup!!.findViewById<View>(R.id.apply_btn_msg) as TextView
+        var applyMsg = viewGroup!!.findViewById<View>(R.id.apply_btn_msg) as TextView
 
-        var btn_apply = viewGroup!!.findViewById<View>(R.id.btn_apply) as Button
+        var btnApply = viewGroup!!.findViewById<View>(R.id.btn_apply) as Button
 
         url.setOnClickListener {
             var intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://webinfo.dankook.ac.kr/tiad/admi/faci/usem/views/findFacsUseApWeblList.do?_view=ok"))
@@ -79,23 +79,22 @@ class ApplyFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         database = Firebase.database.reference
 
-        var current_user = auth.currentUser!!
+        var currentUser = auth.currentUser!!
 
-        btn_event.text = (g_sport)
+        btnEvent.text = (gSport)
 
-        if(g_people != null){
-            btn_people.text = g_people.toString()
+        if(gPeople != null){
+            btnPeople.text = gPeople.toString()
         }
 
-        btn_place.text = g_place
-        btn_time.text = g_playTime
+        btnPlace.text = gPlace
+        btnTime.text = gPlayTime
 
-        if(g_content != null)
-        edittext_content.setText(g_content)
+        if(gContent != null)
+        edittextContent.setText(gContent)
 
 
-        btn_event.setOnClickListener {
-            //Toast.makeText(getActivity(), "~", Toast.LENGTH_LONG).show()
+        btnEvent.setOnClickListener {
             val sports = arrayOf("테니스", "축구", "농구", "족구", "풋살")
 
 
@@ -105,18 +104,16 @@ class ApplyFragment : Fragment() {
                     selectedItem = sports[which]
                 }
                 .setPositiveButton("확인") { dialog, which ->
-                    g_sport = selectedItem.toString()
-                    if (g_sport == "null") {
-                        g_sport = "종목 선택"
+                    gSport = selectedItem.toString()
+                    if (gSport == "null") {
+                        gSport = "종목 선택"
                     }
-                    //Toast.makeText(getActivity(),g_sport, Toast.LENGTH_SHORT).show()
-                    btn_event.text = g_sport
+                    btnEvent.text = gSport
                 }
                 .show()
         }
 
-        btn_people.setOnClickListener {
-            //val people = arrayOf("테니스", "축구", "농구", "족구", "풋살")
+        btnPeople.setOnClickListener {
             val people = arrayOf<String>("2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12",
                 "13", "14", "15", "16", "17", "18", "19", "20", "21", "22")
             var selectedItem: String? = null
@@ -130,19 +127,18 @@ class ApplyFragment : Fragment() {
                 .setPositiveButton("확인") { dialog, which ->
 
                     if (selectedItem != null) {
-                        g_people = selectedItem?.toInt()
+                        gPeople = selectedItem?.toInt()
                     }
                     else{
-                        g_people = null
+                        gPeople = null
                         selectedItem = "인원 선택"
                     }
-                    btn_people.text = selectedItem
-                //Toast.makeText(getActivity(),g_people.toString(), Toast.LENGTH_SHORT).show()
+                    btnPeople.text = selectedItem
                 }
                 .show()
         }
 
-        btn_place.setOnClickListener {
+        btnPlace.setOnClickListener {
             val place = arrayOf<String>("노천마당", "대운동장", "인문관소극장", "족구장", "테니스장A",
                 "테니스장C", "평화의광장 농구장A", "평화의광장 농구장B", "평화의광장 농구장C", "폭포공원",
                 "풋살경기장", "혜당관(학생극장 2층로비)", "혜당관(학생회관)212(학생극장)")
@@ -154,17 +150,16 @@ class ApplyFragment : Fragment() {
                     selectedItem = place[which]
                 }
                 .setPositiveButton("확인") { dialog, which ->
-                    g_place = selectedItem.toString()
-                    //Toast.makeText(getActivity(),g_sport, Toast.LENGTH_SHORT).show()
-                    if (g_place == "null") {
-                        g_place = "종목 선택"
+                    gPlace = selectedItem.toString()
+                    if (gPlace == "null") {
+                        gPlace = "종목 선택"
                     }
-                    btn_place.text = g_place
+                    btnPlace.text = gPlace
                 }
                 .show()
         }
 
-        btn_time.setOnClickListener {
+        btnTime.setOnClickListener {
             var calendar = Calendar.getInstance()
             var year = calendar.get(Calendar.YEAR)
             var month = calendar.get(Calendar.MONTH)
@@ -181,8 +176,8 @@ class ApplyFragment : Fragment() {
                     hour = i
                     minute = i2
 
-                    g_playTime = "%d-%02d-%02d %02d:%02d:00".format(year, month, day, i, i2)
-                    btn_time.text = g_playTime
+                    gPlayTime = "%d-%02d-%02d %02d:%02d:00".format(year, month, day, i, i2)
+                    btnTime.text = gPlayTime
                 }
                 var picker2 = TimePickerDialog(activity, listener2, hour, minute, false ) // true하면 24시간 제
                 picker2.show()
@@ -191,57 +186,71 @@ class ApplyFragment : Fragment() {
             picker1!!.show()
         }
 
-        btn_apply.setOnClickListener {
-            //Toast.makeText(activity,currentTime.toString(), Toast.LENGTH_SHORT).show()
+        btnApply.setOnClickListener {
 
-            var wrong_input = 0
+            val alertCancel = AlertDialog.Builder(getActivity())
+            alertCancel.setMessage("정말로 매치를 등록하시겠습니까?\n* 방장은 매치를 취소할 수 없습니다.")
+            // 확인버튼
+            alertCancel.setPositiveButton("확인") { dialog, which ->
+                database.get().addOnSuccessListener {
+                    var wrongInput = 0
 
-            if (g_sport == "종목 선택") {
-                wrong_input = 1
-                sports_empty.visibility = View.VISIBLE
-            }
-            else{
-                sports_empty.visibility = View.INVISIBLE
-            }
+                    if (gSport == "종목 선택") {
+                        wrongInput = 1
+                        sportsEmpty.visibility = View.VISIBLE
+                    }
+                    else{
+                        sportsEmpty.visibility = View.INVISIBLE
+                    }
 
-            if (g_people == null) {
-                wrong_input = 1
-                totalNum_empty.visibility = View.VISIBLE
-            }
-            else{
-                totalNum_empty.visibility = View.INVISIBLE
-            }
+                    if (gPeople == null) {
+                        wrongInput = 1
+                        totalNumEmpty.visibility = View.VISIBLE
+                    }
+                    else{
+                        totalNumEmpty.visibility = View.INVISIBLE
+                    }
 
-            if (g_playTime == "시간 선택") {
-                wrong_input = 1
-                playtime_empty.visibility = View.VISIBLE
-            }
-            else{
-                playtime_empty.visibility = View.INVISIBLE
-            }
+                    if (gPlayTime == "시간 선택") {
+                        wrongInput = 1
+                        playtimeEmpty.visibility = View.VISIBLE
+                    }
+                    else{
+                        playtimeEmpty.visibility = View.INVISIBLE
+                    }
 
-            if (g_place == "장소 선택") {
-                wrong_input = 1
-                place_empty.visibility = View.VISIBLE
-            }
-            else{
-                place_empty.visibility = View.INVISIBLE
-            }
+                    if (gPlace == "장소 선택") {
+                        wrongInput = 1
+                        placeEmpty.visibility = View.VISIBLE
+                    }
+                    else{
+                        placeEmpty.visibility = View.INVISIBLE
+                    }
 
-            g_content = edittext_content.getText().toString()
-            if (g_content == ""){
-                wrong_input = 1
-                apply_msg.text = "내용을 입력해주세요"
-                apply_msg.visibility = View.VISIBLE
-            }
-            else{
-                apply_msg.visibility = View.INVISIBLE
-            }
+                    gContent = edittextContent.getText().toString()
+                    if (gContent == ""){
+                        wrongInput = 1
+                        applyMsg.text = "내용을 입력해주세요"
+                        applyMsg.visibility = View.VISIBLE
+                    }
+                    else{
+                        applyMsg.visibility = View.INVISIBLE
+                    }
 
-            if (wrong_input.equals(0)){
-
-                checkSameMatch(current_user)
+                    if (wrongInput.equals(0)){
+                        checkSameMatch(currentUser)
+                    }
+                }.addOnFailureListener{
+                    Toast.makeText(activity, "DB 읽기 실패", Toast.LENGTH_LONG).show()
+                }
             }
+            // 취소버튼
+            alertCancel.setNegativeButton("취소", null)
+            val alert = alertCancel.create()
+            alert.setIcon(R.drawable.logo_danplay)
+            alert.setTitle("매치 등록")
+            alert.show()
+
         }
 
         return viewGroup
@@ -277,20 +286,20 @@ class ApplyFragment : Fragment() {
 
         if (user != null) {
             database.child("user").child(user.uid).child("matchId").get().addOnSuccessListener {
-                var temp_matchId = ArrayList<String>()
-                temp_matchId = it.value as ArrayList<String>
+                var tempMatchId = ArrayList<String>()
+                tempMatchId = it.value as ArrayList<String>
 
-                if (temp_matchId[0].equals("-1")){
-                    temp_matchId.clear()
-                    temp_matchId.add(matchId)
+                if (tempMatchId[0].equals("-1")){
+                    tempMatchId.clear()
+                    tempMatchId.add(matchId)
                 }
                 else{
-                    temp_matchId.add(matchId)
+                    tempMatchId.add(matchId)
                 }
                 database.child("user").child(user!!.uid).child("matchId").setValue(null)
-                database.child("user").child(user!!.uid).child("matchId").setValue(temp_matchId)
+                database.child("user").child(user!!.uid).child("matchId").setValue(tempMatchId)
 
-                temp_matchId.clear()
+                tempMatchId.clear()
             }.addOnFailureListener{
                 Toast.makeText(activity, "DB 읽기 실패", Toast.LENGTH_LONG).show()
             }
@@ -298,32 +307,30 @@ class ApplyFragment : Fragment() {
     }
 
     private fun setMatchData(user: FirebaseUser?) {
-        var MatchDTO = MatchDTO()
+        var matchDTO = MatchDTO()
         val currentTime = System.currentTimeMillis()
         val timeFormat = SimpleDateFormat("HH:mm:ss")
         val dataFormat = SimpleDateFormat("yyyy-MM-dd")
         val date = dataFormat.format(currentTime)
         val time = timeFormat.format(currentTime)
 
-
-
         if (user != null) {
-            MatchDTO.sports = g_sport
-            MatchDTO.totalNum = g_people
-            MatchDTO.place = g_place
-            MatchDTO.content = g_content
+            matchDTO.sports = gSport
+            matchDTO.totalNum = gPeople
+            matchDTO.place = gPlace
+            matchDTO.content = gContent
 
-            var temp_userId = ArrayList<String>()
+            var tempUserId = ArrayList<String>()
 
-            temp_userId.add(user.uid)
-            MatchDTO.registrant = temp_userId
+            tempUserId.add(user.uid)
+            matchDTO.registrant = tempUserId
 
-            MatchDTO.playTime = g_playTime
-            MatchDTO.applyTime = date.toString() + ' ' + time.toString()
-            g_matchId = hashSHA256(g_sport.plus(g_playTime.plus(g_place)))
+            matchDTO.playTime = gPlayTime
+            matchDTO.applyTime = date.toString() + ' ' + time.toString()
+            gMatchId = hashSHA256(gSport.plus(gPlayTime.plus(gPlace)))
 
-            database.child("match").child(g_matchId.toString()).setValue(MatchDTO)
-            writeNewUser(user, g_matchId!!)
+            database.child("match").child(gMatchId.toString()).setValue(matchDTO)
+            writeNewUser(user, gMatchId!!)
             Toast.makeText(activity, "매치가 등록되었습니다!", Toast.LENGTH_SHORT).show()
             moveMainPage()
         }
@@ -338,20 +345,20 @@ class ApplyFragment : Fragment() {
         if (user != null) {
             database.get().addOnSuccessListener { it ->
                 var sign = false
-                var apply_msg = viewGroup!!.findViewById<View>(R.id.apply_btn_msg) as TextView
+                var applyMsg = viewGroup!!.findViewById<View>(R.id.apply_btn_msg) as TextView
 
                 for (match in it.child("match").children) {
                     val sports = match.child("sports").value.toString()
                     val playTime = match.child("playTime").value.toString()
                     val place = match.child("place").value.toString()
-                    if (g_sport.equals(sports) and g_playTime.equals(playTime) and g_place.equals(place)){
+                    if (gSport.equals(sports) and gPlayTime.equals(playTime) and gPlace.equals(place)){
                         sign = true
                         break
                     }
                 }
                 if (sign) {
-                    apply_msg.text = "동일한 조건의 매치가 존재합니다. 조회를 통해 예약해주세요!"
-                    apply_msg.visibility = View.VISIBLE
+                    applyMsg.text = "동일한 조건의 매치가 존재합니다. 조회를 통해 예약해주세요!"
+                    applyMsg.visibility = View.VISIBLE
                 }
                 else {
                     var matchId = ArrayList<String>()
@@ -361,18 +368,18 @@ class ApplyFragment : Fragment() {
                         if(current_matchId == "-1"){
                             break
                         }
-                        else if(it.child("match").child(current_matchId).child("playTime").value.toString() == g_playTime){
+                        else if(it.child("match").child(current_matchId).child("playTime").value.toString() == gPlayTime){
                             sign = true
                             break
                         }
                     }
                     if(sign){
-                        apply_msg.text = "동일한 시간에 예약이 존재합니다. 예약을 확인해주세요!"
-                        apply_msg.visibility = View.VISIBLE
+                        applyMsg.text = "동일한 시간에 예약이 존재합니다. 예약을 확인해주세요!"
+                        applyMsg.visibility = View.VISIBLE
                     }
                     else{
                         setMatchData(user)
-                        apply_msg.visibility = View.INVISIBLE
+                        applyMsg.visibility = View.INVISIBLE
                     }
                 }
             }.addOnFailureListener {}

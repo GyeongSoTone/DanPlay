@@ -30,44 +30,44 @@ class MainpageFragment : Fragment() {
         viewGroup = inflater.inflate(R.layout.fragment_mainpage, container, false) as ViewGroup
         database = Firebase.database.reference
         auth = FirebaseAuth.getInstance()
-        var current_user = auth.currentUser!!
-        var mymatch_list = ArrayList<String>()
+        var currentUser = auth.currentUser!!
+        var mymatchList = ArrayList<String>()
         var temp : String
         var name = viewGroup!!.findViewById<View>(R.id.text_name) as TextView
-        var my_match = viewGroup!!.findViewById<View>(R.id.text_my_match) as TextView
-        var text_sports1 = viewGroup!!.findViewById<View>(R.id.text_sports1) as TextView
-        var text_sports2 = viewGroup!!.findViewById<View>(R.id.text_sports2) as TextView
-        var text_sports3 = viewGroup!!.findViewById<View>(R.id.text_sports3) as TextView
-        var text_sports4 = viewGroup!!.findViewById<View>(R.id.text_sports4) as TextView
-        var btn_sports1 = viewGroup!!.findViewById<View>(R.id.btn_sports1) as ImageButton
-        var btn_sports2 = viewGroup!!.findViewById<View>(R.id.btn_sports2) as ImageButton
-        var btn_sports3 = viewGroup!!.findViewById<View>(R.id.btn_sports3) as ImageButton
-        var btn_sports4 = viewGroup!!.findViewById<View>(R.id.btn_sports4) as ImageButton
+        var myMatch = viewGroup!!.findViewById<View>(R.id.text_my_match) as TextView
+        var textSports1 = viewGroup!!.findViewById<View>(R.id.text_sports1) as TextView
+        var textSports2 = viewGroup!!.findViewById<View>(R.id.text_sports2) as TextView
+        var textSports3 = viewGroup!!.findViewById<View>(R.id.text_sports3) as TextView
+        var textSports4 = viewGroup!!.findViewById<View>(R.id.text_sports4) as TextView
+        var btnSports1 = viewGroup!!.findViewById<View>(R.id.btn_sports1) as ImageButton
+        var btnSports2 = viewGroup!!.findViewById<View>(R.id.btn_sports2) as ImageButton
+        var btnSports3 = viewGroup!!.findViewById<View>(R.id.btn_sports3) as ImageButton
+        var btnSports4 = viewGroup!!.findViewById<View>(R.id.btn_sports4) as ImageButton
 
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 var i = 0
-                for(snapshot in dataSnapshot.child("user").child(current_user.uid).children){
+                for(snapshot in dataSnapshot.child("user").child(currentUser.uid).children){
                     if(snapshot.key.equals("name")){
                         name.setText("${snapshot.value}")
                     }
                     else if(snapshot.key.equals("preference")){
-                        text_sports1.setText(snapshot.child("0").value.toString())
-                        text_sports2.setText(snapshot.child("1").value.toString())
-                        text_sports3.setText(snapshot.child("2").value.toString())
-                        text_sports4.setText(snapshot.child("3").value.toString())
-                        testNull(text_sports1)
-                        testNull(text_sports2)
-                        testNull(text_sports3)
-                        testNull(text_sports4)
-                        setImage(text_sports1, btn_sports1)
-                        setImage(text_sports2, btn_sports2)
-                        setImage(text_sports3, btn_sports3)
-                        setImage(text_sports4, btn_sports4)
+                        textSports1.setText(snapshot.child("0").value.toString())
+                        textSports2.setText(snapshot.child("1").value.toString())
+                        textSports3.setText(snapshot.child("2").value.toString())
+                        textSports4.setText(snapshot.child("3").value.toString())
+                        testNull(textSports1)
+                        testNull(textSports2)
+                        testNull(textSports3)
+                        testNull(textSports4)
+                        setImage(textSports1, btnSports1)
+                        setImage(textSports2, btnSports2)
+                        setImage(textSports3, btnSports3)
+                        setImage(textSports4, btnSports4)
                     }
                     else if(snapshot.key.equals("matchId")){
                         i = 1
-                        for(snapshot in dataSnapshot.child("user").child(current_user.uid).child("matchId").children) {
+                        for(snapshot in dataSnapshot.child("user").child(currentUser.uid).child("matchId").children) {
                             var match = snapshot.value.toString()
                             for(snapshot in dataSnapshot.child("match").children){
                                 if(snapshot.key.equals(match)){
@@ -75,21 +75,21 @@ class MainpageFragment : Fragment() {
                                     var match_sports = snapshot.child("sports").value.toString()
                                     temp = match_time.slice(IntRange(5, 15))
                                     temp = temp + " " + match_sports
-                                    mymatch_list.add(temp)
+                                    mymatchList.add(temp)
                                 }
                             }
                         }
-                        mymatch_list.sort()
-                        if(mymatch_list.count() == 0){
-                            my_match.setText("예약된 매치 없음")
+                        mymatchList.sort()
+                        if(mymatchList.count() == 0){
+                            myMatch.setText("예약된 매치 없음")
                         }
-                        else if(mymatch_list.count() == 1){
-                            temp = mymatch_list[0]
-                            my_match.setText(temp)
+                        else if(mymatchList.count() == 1){
+                            temp = mymatchList[0]
+                            myMatch.setText(temp)
                         }
                         else{
-                            temp = mymatch_list[0] + "\n" + mymatch_list[1]
-                            my_match.setText(temp)
+                            temp = mymatchList[0] + "\n" + mymatchList[1]
+                            myMatch.setText(temp)
                         }
                     }
                     else{
@@ -97,7 +97,7 @@ class MainpageFragment : Fragment() {
                     }
                 }
                 if(i == 0){
-                    my_match.setText("예약된 매치 없음")
+                    myMatch.setText("예약된 매치 없음")
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
@@ -108,19 +108,19 @@ class MainpageFragment : Fragment() {
         return viewGroup
     }
 
-    fun testNull(text_sports: TextView){
-        if(text_sports.getText().equals("null")){
-            text_sports.setText("")
+    fun testNull(textSports: TextView){
+        if(textSports.getText().equals("null")){
+            textSports.setText("")
         }
     }
 
-    fun setImage(text_sports: TextView, btn_sports: ImageButton){
-        when(text_sports.getText()){
-            "테니스" -> btn_sports.setImageResource(R.drawable.tennis)
-            "축구" -> btn_sports.setImageResource(R.drawable.soccer)
-            "농구" -> btn_sports.setImageResource(R.drawable.basket)
-            "족구" -> btn_sports.setImageResource(R.drawable.jokgoo)
-            "풋살" -> btn_sports.setImageResource(R.drawable.futsal)
+    fun setImage(textSports: TextView, btnSports: ImageButton){
+        when(textSports.getText()){
+            "테니스" -> btnSports.setImageResource(R.drawable.tennis)
+            "축구" -> btnSports.setImageResource(R.drawable.soccer)
+            "농구" -> btnSports.setImageResource(R.drawable.basket)
+            "족구" -> btnSports.setImageResource(R.drawable.jokgoo)
+            "풋살" -> btnSports.setImageResource(R.drawable.futsal)
             else -> null
         }
     }
