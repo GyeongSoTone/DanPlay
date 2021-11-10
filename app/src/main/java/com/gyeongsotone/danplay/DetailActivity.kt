@@ -121,7 +121,7 @@ class DetailActivity : AppCompatActivity() {
                 var tempMatchId = it.child("user").child(user!!.uid).child("matchId").value as ArrayList<String>
                 var myMatchNum = it.child("user").child(user!!.uid).child("matchId").childrenCount
                 var matchUserNum = it.child("match").child(matchId).child("registrant").childrenCount
-                if (tempMatchId[0].equals("-1")) {
+                if (tempMatchId[0] == "-1") {
                     database.child("user").child(user!!.uid).child("matchId")
                         .child("0").setValue(matchId)
                     database.child("match").child(matchId).child("registrant")

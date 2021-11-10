@@ -30,7 +30,7 @@ class MyMatchDetailActivity : AppCompatActivity() {
         database = Firebase.database.reference
         auth = FirebaseAuth.getInstance()
 
-        var current_user = auth.currentUser!!
+        var currentUser = auth.currentUser!!
         var name = binding.textviewName
         var sports = binding.textviewSports
         var number = binding.textviewNumber
@@ -53,9 +53,9 @@ class MyMatchDetailActivity : AppCompatActivity() {
             val alert_cancel = AlertDialog.Builder(this)
             alert_cancel.setMessage("정말로 매치를 취소하시겠습니까?")
             // 확인버튼
-            alert_cancel.setPositiveButton("확인") { dialog, which ->
+            alert_cancel.setPositiveButton("확인") { _, _ ->
                 database.get().addOnSuccessListener {
-                    deleteMatch(it, matchId, current_user)
+                    deleteMatch(it, matchId, currentUser)
                 }.addOnFailureListener{
                     Toast.makeText(this, "DB 읽기 실패", Toast.LENGTH_LONG).show()
                 }

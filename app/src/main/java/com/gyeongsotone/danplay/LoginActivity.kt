@@ -29,24 +29,19 @@ class LoginActivity : AppCompatActivity() {
         database = Firebase.database.reference
         setContentView(binding.root)
 
-        /* 편의를 위해 로고 클릭 시 메인 이동 활성화 */
-        binding.logoDanplay.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-        }
         binding.signUp.setOnClickListener{
             startActivity(Intent(this, SignupActivity::class.java))
             finish()
         }
 
         binding.login.setOnClickListener{
-            signinEmail()
+            signInEmail()
         }
 
 
     }
 
-    private fun signinEmail() {
+    private fun signInEmail() {
         var loginEmail = binding.loginIdTextedit.text.toString()
         var loginPwd = binding.loginPasswordTextedit.text.toString()
         if (loginEmail.equals("") or loginPwd.equals("")) {

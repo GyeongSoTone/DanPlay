@@ -1,6 +1,5 @@
 package com.gyeongsotone.danplay
 
-import android.content.Intent
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.os.Bundle
@@ -31,7 +30,7 @@ class MainpageFragment : Fragment() {
         database = Firebase.database.reference
         auth = FirebaseAuth.getInstance()
         var currentUser = auth.currentUser!!
-        var mymatchList = ArrayList<String>()
+        var myMatchList = ArrayList<String>()
         var temp : String
         var name = viewGroup!!.findViewById<View>(R.id.text_name) as TextView
         var myMatch = viewGroup!!.findViewById<View>(R.id.text_my_match) as TextView
@@ -71,29 +70,28 @@ class MainpageFragment : Fragment() {
                             var match = snapshot.value.toString()
                             for(snapshot in dataSnapshot.child("match").children){
                                 if(snapshot.key.equals(match)){
-                                    var match_time = snapshot.child("playTime").value.toString()
-                                    var match_sports = snapshot.child("sports").value.toString()
-                                    temp = match_time.slice(IntRange(5, 15))
-                                    temp = temp + " " + match_sports
-                                    mymatchList.add(temp)
+                                    var matchTime = snapshot.child("playTime").value.toString()
+                                    var matchSports = snapshot.child("sports").value.toString()
+                                    temp = matchTime.slice(IntRange(5, 15))
+                                    temp = temp + " " + matchSports
+                                    myMatchList.add(temp)
                                 }
                             }
                         }
-                        mymatchList.sort()
-                        if(mymatchList.count() == 0){
+                        myMatchList.sort()
+                        if(myMatchList.count() == 0){
                             myMatch.setText("예약된 매치 없음")
                         }
-                        else if(mymatchList.count() == 1){
-                            temp = mymatchList[0]
+                        else if(myMatchList.count() == 1){
+                            temp = myMatchList[0]
                             myMatch.setText(temp)
                         }
                         else{
-                            temp = mymatchList[0] + "\n" + mymatchList[1]
+                            temp = myMatchList[0] + "\n" + myMatchList[1]
                             myMatch.setText(temp)
                         }
                     }
                     else{
-                        // ???
                     }
                 }
                 if(i == 0){

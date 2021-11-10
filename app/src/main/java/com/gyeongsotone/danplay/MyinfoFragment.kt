@@ -36,7 +36,7 @@ class MyinfoFragment : Fragment() {
         database = Firebase.database.reference
         auth = FirebaseAuth.getInstance()
         var currentUser = auth.currentUser!!
-        var btnSignout = viewGroup!!.findViewById<View>(R.id.signout) as Button
+        var btnSignOut = viewGroup!!.findViewById<View>(R.id.signout) as Button
         var btnLogout = viewGroup!!.findViewById<View>(R.id.logout) as Button
         var btnContact = viewGroup!!.findViewById<View>(R.id.contact) as Button
 
@@ -66,11 +66,11 @@ class MyinfoFragment : Fragment() {
 
 
         // 회원탈퇴
-        btnSignout.setOnClickListener {
-            val alertSignout = AlertDialog.Builder(getActivity())
-            alertSignout.setMessage("정말로 회원탈퇴 하시겠습니까?")
+        btnSignOut.setOnClickListener {
+            val alertSignOut = AlertDialog.Builder(getActivity())
+            alertSignOut.setMessage("정말로 회원탈퇴 하시겠습니까?")
             // 확인버튼
-            alertSignout.setPositiveButton("확인") { dialog, which ->
+            alertSignOut.setPositiveButton("확인") { dialog, which ->
                 database.child("user").child(currentUser.uid).removeValue()
                     .addOnSuccessListener {
                         // Write was successful!
@@ -90,8 +90,8 @@ class MyinfoFragment : Fragment() {
                     }
             }
             // 취소버튼
-            alertSignout.setNegativeButton("취소", null)
-            val alert = alertSignout.create()
+            alertSignOut.setNegativeButton("취소", null)
+            val alert = alertSignOut.create()
             alert.setIcon(R.drawable.logo_danplay)
             alert.setTitle("회원탈퇴")
             alert.show()
