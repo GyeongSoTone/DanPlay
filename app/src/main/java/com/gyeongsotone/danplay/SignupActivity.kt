@@ -185,17 +185,19 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
         var id_format = 0
         var emailArr = userEmail.split("@")
 
-        if (!userEmail.contains("@")){
-            binding.idFail.setText("올바른 양식의 아이디를 입력해주세요.")
-            binding.idFail.visibility = View.VISIBLE
-            return
-        }
-
-        if (((emailArr[0].length == 8) and (emailArr[1].equals("dankook.ac.kr")))) {
-            id_format = 1
-        }
-        else {
-            wrong_input=1
+        if (userEmail.contains("@")) {
+            if (((emailArr[0].length == 8) and (emailArr[1].equals("dankook.ac.kr")))) {
+                id_format = 1
+                binding.idFail.visibility = View.INVISIBLE
+            }
+            else {
+                id_format = 0
+                wrong_input=1
+                binding.idFail.setText("올바른 양식의 아이디를 입력해주세요.")
+                binding.idFail.visibility = View.VISIBLE
+            }
+        }else {
+            wrong_input= 1
             binding.idFail.setText("올바른 양식의 아이디를 입력해주세요.")
             binding.idFail.visibility = View.VISIBLE
         }
