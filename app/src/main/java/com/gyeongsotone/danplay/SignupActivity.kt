@@ -189,6 +189,27 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
             if (((emailArr[0].length == 8) and (emailArr[1].equals("dankook.ac.kr")))) {
                 id_format = 1
                 binding.idFail.visibility = View.INVISIBLE
+
+                auth?.createUserWithEmailAndPassword(userEmail, userPwd)
+                    ?.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            // db에 저장
+                            setUserData(task.result?.user, userInfo)
+                            moveLoginPage(task.result?.user)
+                            Toast.makeText(this, "회원가입 성공", Toast.LENGTH_LONG).show()
+                        } else {
+                            //if you have account move to login page
+                            if (task.exception?.message.equals("The email address is already in use by another account.")) {
+                                Toast.makeText(this, "이미 존재하는 ID 입니다.", Toast.LENGTH_LONG).show()
+                            }
+                            //Show the error message
+                            else {
+                                Toast.makeText(this, task.exception?.message, Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }
+
+
             }
             else {
                 id_format = 0
@@ -211,7 +232,7 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
         if (wrong_input.equals(1)){
             return
         }
-
+/*
         if (id_format.equals(1)) {
             auth?.createUserWithEmailAndPassword(userEmail, userPwd)
                 ?.addOnCompleteListener { task ->
@@ -230,7 +251,7 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
                         }
                     }
                 }
-        }
+        }*/
     }
 
     private fun setUserData(user: FirebaseUser?, userInfo: Array<String>) {
