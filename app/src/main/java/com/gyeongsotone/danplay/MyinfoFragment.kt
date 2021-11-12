@@ -83,9 +83,11 @@ class MyinfoFragment : Fragment() {
                 currentUser.delete()
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            Toast.makeText(getActivity(), "회원탈퇴 완료.", Toast.LENGTH_LONG).show()
+                            Toast.makeText(activity, "회원탈퇴 완료.", Toast.LENGTH_LONG).show()
                             val intent = Intent(requireActivity().applicationContext, LoginActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(intent)
+                            activity?.finish()
                         }
                     }
             }
@@ -102,9 +104,12 @@ class MyinfoFragment : Fragment() {
             alertLogout.setMessage("정말로 로그아웃 하시겠습니까?")
             // 확인버튼
             alertLogout.setPositiveButton("확인") { dialog, which ->
-                Toast.makeText(getActivity(), "로그아웃 완료.", Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, "로그아웃 완료.", Toast.LENGTH_LONG).show()
+                FirebaseAuth.getInstance().signOut()
                 val intent = Intent(requireActivity().applicationContext, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
+                activity?.finish()
             }
             // 취소버튼
             alertLogout.setNegativeButton("취소", null)

@@ -335,6 +335,7 @@ class ApplyFragment : Fragment() {
     private fun moveMainPage() {
         val intent = Intent(activity, MainActivity::class.java)
         startActivity(intent)
+        activity?.finish()
     }
 
     private fun checkSameMatch(user: FirebaseUser?) {
