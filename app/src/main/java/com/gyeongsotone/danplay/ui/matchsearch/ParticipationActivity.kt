@@ -1,4 +1,4 @@
-package com.gyeongsotone.danplay
+package com.gyeongsotone.danplay.ui.matchsearch
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -13,10 +13,13 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.gyeongsotone.danplay.MainActivity
+import com.gyeongsotone.danplay.R
 import com.gyeongsotone.danplay.databinding.ActivityDetailBinding
+import com.gyeongsotone.danplay.model.ListViewModel
 
 
-class DetailActivity : AppCompatActivity() {
+class ParticipationActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private var mBinding: ActivityDetailBinding? = null

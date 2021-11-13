@@ -6,6 +6,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.widget.Toast
 import com.google.android.material.navigation.NavigationBarView
+import com.gyeongsotone.danplay.ui.matchapply.ApplyFragment
+import com.gyeongsotone.danplay.ui.main.MainpageFragment
+import com.gyeongsotone.danplay.ui.mypage.MyinfoFragment
+import com.gyeongsotone.danplay.ui.matchsearch.SearchFragment
 
 class MainActivity : AppCompatActivity() {
     private var backBtnDoubleClick = false

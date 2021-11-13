@@ -1,4 +1,4 @@
-package com.gyeongsotone.danplay
+package com.gyeongsotone.danplay.ui.matchsearch
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,7 +11,9 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.gyeongsotone.danplay.R
 import com.gyeongsotone.danplay.adapter.ListViewAdapter
+import com.gyeongsotone.danplay.model.ListViewModel
 import kotlin.collections.ArrayList
 
 class SearchFragment : Fragment() {
@@ -134,7 +136,7 @@ class SearchFragment : Fragment() {
         listview.adapter = listviewAdapter
         listview.setOnItemClickListener{ parent, view, position, id ->
             val clickedList = listItem[position]
-            val intent = Intent(requireActivity().applicationContext, DetailActivity::class.java)
+            val intent = Intent(requireActivity().applicationContext, ParticipationActivity::class.java)
             intent.putExtra("matchInfo", clickedList)
             intent.putExtra("matchId", clickedList.matchId)
             startActivity(intent)

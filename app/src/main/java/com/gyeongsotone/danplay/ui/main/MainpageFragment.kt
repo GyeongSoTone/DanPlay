@@ -1,4 +1,4 @@
-package com.gyeongsotone.danplay
+package com.gyeongsotone.danplay.ui.main
 
 import android.view.ViewGroup
 import android.view.LayoutInflater
@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.gyeongsotone.danplay.R
 
 class MainpageFragment : Fragment() {
     var viewGroup: ViewGroup? = null

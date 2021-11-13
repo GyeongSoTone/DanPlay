@@ -6,7 +6,7 @@
     android:id="@+id/my_match_detail_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyMatchDetailActivity">
+    tools:context=".ui.mypage.MyMatchDetailActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

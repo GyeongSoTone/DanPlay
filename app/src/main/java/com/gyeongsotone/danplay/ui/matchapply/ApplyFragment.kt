@@ -1,4 +1,4 @@
-package com.gyeongsotone.danplay
+package com.gyeongsotone.danplay.ui.matchapply
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
@@ -16,6 +16,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.gyeongsotone.danplay.MainActivity
+import com.gyeongsotone.danplay.R
 import com.gyeongsotone.danplay.model.MatchDTO
 import java.security.DigestException
 import java.security.MessageDigest

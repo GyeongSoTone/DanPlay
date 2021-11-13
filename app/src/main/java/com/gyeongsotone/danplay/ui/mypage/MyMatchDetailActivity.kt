@@ -1,4 +1,4 @@
-package com.gyeongsotone.danplay
+package com.gyeongsotone.danplay.ui.mypage
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -12,7 +12,10 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
+import com.gyeongsotone.danplay.MainActivity
+import com.gyeongsotone.danplay.R
 import com.gyeongsotone.danplay.databinding.ActivityMyMatchDetailBinding
+import com.gyeongsotone.danplay.model.ListViewModel
 
 
 class MyMatchDetailActivity : AppCompatActivity() {
