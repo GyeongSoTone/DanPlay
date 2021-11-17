@@ -18,6 +18,7 @@ import com.gyeongsotone.danplay.databinding.ActivitySignupBinding
 import com.gyeongsotone.danplay.model.UserDTO
 import android.view.View
 import android.widget.RadioGroup
+import com.gyeongsotone.danplay.MainActivity
 import com.gyeongsotone.danplay.R
 
 
@@ -258,5 +259,10 @@ class SignupActivity : AppCompatActivity(), View.OnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
+    }
+
+    override fun onBackPressed() {
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
 }
