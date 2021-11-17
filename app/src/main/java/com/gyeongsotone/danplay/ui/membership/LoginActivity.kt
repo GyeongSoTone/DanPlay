@@ -3,6 +3,7 @@ package com.gyeongsotone.danplay.ui.membership
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.widget.Toast
 import com.gyeongsotone.danplay.databinding.ActivityLoginBinding
@@ -16,6 +17,7 @@ import com.gyeongsotone.danplay.MainActivity
 
 class LoginActivity : AppCompatActivity() {
 
+    private var backBtnDoubleClick = false
     private lateinit var database: DatabaseReference
     private var mBinding: ActivityLoginBinding? = null
     private val binding get() = mBinding!!
@@ -74,5 +76,17 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
+    }
+
+    override fun onBackPressed() {
+        if (backBtnDoubleClick)
+            finish()
+        backBtnDoubleClick = true
+
+        Toast.makeText(this, "종료하시려면 더블 클릭 하세요.", Toast.LENGTH_LONG).show()
+
+        Handler().postDelayed(Runnable{
+            backBtnDoubleClick = false
+        },2000)
     }
 }
