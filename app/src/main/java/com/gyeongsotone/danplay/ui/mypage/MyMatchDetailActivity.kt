@@ -17,13 +17,11 @@ import com.gyeongsotone.danplay.R
 import com.gyeongsotone.danplay.databinding.ActivityMyMatchDetailBinding
 import com.gyeongsotone.danplay.model.ListViewModel
 
-
 class MyMatchDetailActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private var mBinding: ActivityMyMatchDetailBinding? = null
     private val binding get() = mBinding!!
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,20 +30,18 @@ class MyMatchDetailActivity : AppCompatActivity() {
 
         database = Firebase.database.reference
         auth = FirebaseAuth.getInstance()
-
-        var currentUser = auth.currentUser!!
-        var name = binding.textviewName
-        var sports = binding.textviewSports
-        var number = binding.textviewNumber
-        var time = binding.textviewTime
-        var place = binding.textviewPlace
-        var content = binding.textviewContent
-        var btnCancel = binding.buttonCancel
-
+        val currentUser = auth.currentUser!!
+        val name = binding.textviewName
+        val sports = binding.textviewSports
+        val number = binding.textviewNumber
+        val time = binding.textviewTime
+        val place = binding.textviewPlace
+        val content = binding.textviewContent
+        val btnCancel = binding.buttonCancel
         val match = intent.getSerializableExtra("matchInfo") as ListViewModel
         val matchId = intent.getSerializableExtra("matchId") as String
         name.text = match.name
-        var listStrTitle = match.title.split("|")
+        val listStrTitle = match.title.split("|")
         sports.text = listStrTitle[0].trim()
         number.text = listStrTitle[4].trim()
         time.text = listStrTitle[1].trim() + " " + listStrTitle[2].trim()
@@ -53,54 +49,55 @@ class MyMatchDetailActivity : AppCompatActivity() {
         content.text = match.content
 
         btnCancel.setOnClickListener {
-            val alert_cancel = AlertDialog.Builder(this)
-            alert_cancel.setMessage("정말로 매치를 취소하시겠습니까?")
+            val alertCancel = AlertDialog.Builder(this)
+            alertCancel.setMessage("정말로 매치를 취소하시겠습니까?")
             // 확인버튼
-            alert_cancel.setPositiveButton("확인") { _, _ ->
+            alertCancel.setPositiveButton("확인") { _, _ ->
                 database.get().addOnSuccessListener {
                     deleteMatch(it, matchId, currentUser)
-                }.addOnFailureListener{
+                }.addOnFailureListener {
                     Toast.makeText(this, "DB 읽기 실패", Toast.LENGTH_LONG).show()
                 }
             }
             // 취소버튼
-            alert_cancel.setNegativeButton("취소", null)
-            val alert = alert_cancel.create()
+            alertCancel.setNegativeButton("취소", null)
+            val alert = alertCancel.create()
             alert.setIcon(R.drawable.logo_danplay)
             alert.setTitle("매치 취소")
             alert.show()
         }
     }
 
-    fun deleteMatch(it: DataSnapshot, matchId: String, current_user: FirebaseUser){
-        var cancelMsg = binding.cancelBtnMsg
+    private fun deleteMatch(it: DataSnapshot, matchId: String, current_user: FirebaseUser) {
+        val cancelMsg = binding.cancelBtnMsg
         var i = 0
-        for(snapshot in it.child("match").child(matchId).child("registrant").children){
-            if(snapshot.value.toString().equals(current_user.uid)){
-                if(i == 0){
+        for (snapshot in it.child("match").child(matchId).child("registrant").children) {
+            if (snapshot.value.toString() == current_user.uid) {
+                if (i == 0) {
                     break
                 }
-                database.child("match").child(matchId).child("registrant").child(snapshot.key.toString()).removeValue()
+                database.child("match").child(matchId).child("registrant")
+                    .child(snapshot.key.toString()).removeValue()
             }
             i = 1
         }
-        if(i == 0){
+        if (i == 0) {
             cancelMsg.text = "방장은 매치를 취소할 수 없습니다."
             cancelMsg.visibility = View.VISIBLE
-        }
-        else{
-            for(snapshot in it.child("user").child(current_user.uid).child("matchId").children) {
-                if(snapshot.value.toString().equals(matchId)){
-                    if (it.child("user").child(current_user.uid).child("matchId").childrenCount.toString() == "1") {
+        } else {
+            for (snapshot in it.child("user").child(current_user.uid).child("matchId").children) {
+                if (snapshot.value.toString() == matchId) {
+                    if (it.child("user").child(current_user.uid)
+                            .child("matchId").childrenCount.toString() == "1"
+                    ) {
                         database.child("user").child(current_user.uid).child("matchId")
                             .child(snapshot.key.toString()).setValue("-1")
-                    }
-                    else
-                        database.child("user").child(current_user.uid).child("matchId").child(snapshot.key.toString()).removeValue()
+                    } else
+                        database.child("user").child(current_user.uid).child("matchId")
+                            .child(snapshot.key.toString()).removeValue()
                 }
             }
             Toast.makeText(this, "매치취소 완료", Toast.LENGTH_LONG).show()
-
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }

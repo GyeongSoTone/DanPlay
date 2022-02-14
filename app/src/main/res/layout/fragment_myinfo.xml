@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F2F3F7"
-    tools:context=".ui.mypage.MyinfoFragment">
+    tools:context=".ui.mypage.MyInfoFragment">
 
 
     <TextView

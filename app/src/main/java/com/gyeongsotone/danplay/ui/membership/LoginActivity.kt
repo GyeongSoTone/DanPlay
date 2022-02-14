@@ -14,7 +14,6 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.gyeongsotone.danplay.MainActivity
 
-
 class LoginActivity : AppCompatActivity() {
 
     private var backBtnDoubleClick = false
@@ -25,46 +24,47 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         // init
         mBinding = ActivityLoginBinding.inflate(layoutInflater)
         auth = FirebaseAuth.getInstance()
         database = Firebase.database.reference
         setContentView(binding.root)
 
-        binding.signUp.setOnClickListener{
+        binding.signUp.setOnClickListener {
             startActivity(Intent(this, SignupActivity::class.java))
             finish()
         }
 
-        binding.login.setOnClickListener{
+        binding.login.setOnClickListener {
             signInEmail()
         }
-
-
     }
 
     private fun signInEmail() {
-        var loginEmail = binding.loginIdTextedit.text.toString()
-        var loginPwd = binding.loginPasswordTextedit.text.toString()
-        if (loginEmail.equals("") or loginPwd.equals("")) {
+        val loginEmail = binding.loginIdTextedit.text.toString()
+        val loginPwd = binding.loginPasswordTextedit.text.toString()
+        if ((loginEmail == "") or (loginPwd == "")) {
             binding.loginFail.visibility = View.VISIBLE
-            binding.loginFail.setText("아이디와 비밀번호를 입력해주세요")
+            binding.loginFail.text = "아이디와 비밀번호를 입력해주세요"
             return
         }
-        auth?.signInWithEmailAndPassword(loginEmail, loginPwd)
-            ?.addOnCompleteListener {
-                    task ->
+        auth.signInWithEmailAndPassword(loginEmail, loginPwd)
+            .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    database.child("user").child(task.result?.user!!.uid).get().addOnSuccessListener {
-                        Toast.makeText(this, "${it.child("name").value}님 환영합니다!", Toast.LENGTH_LONG).show()
-                    }.addOnFailureListener{
-                        binding.loginFail.visibility = View.VISIBLE
-                    }
+                    database.child("user").child(task.result?.user!!.uid).get()
+                        .addOnSuccessListener {
+                            Toast.makeText(
+                                this,
+                                "${it.child("name").value}님 환영합니다!",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }.addOnFailureListener {
+                            binding.loginFail.visibility = View.VISIBLE
+                        }
                     moveMainPage(task.result?.user)
                 } else {
                     //Show the error message
-                    binding.loginFail.setText("아이디와 비밀번호를 확인해주세요")
+                    binding.loginFail.text = "아이디와 비밀번호를 확인해주세요"
                     binding.loginFail.visibility = View.VISIBLE
                 }
             }
@@ -82,11 +82,9 @@ class LoginActivity : AppCompatActivity() {
         if (backBtnDoubleClick)
             finish()
         backBtnDoubleClick = true
-
         Toast.makeText(this, "종료하시려면 더블 클릭 하세요.", Toast.LENGTH_LONG).show()
-
-        Handler().postDelayed(Runnable{
+        Handler().postDelayed(Runnable {
             backBtnDoubleClick = false
-        },2000)
+        }, 2000)
     }
 }
