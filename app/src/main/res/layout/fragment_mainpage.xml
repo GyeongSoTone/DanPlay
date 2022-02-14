@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#F2F3F7"
     android:textAlignment="center"
-    tools:context=".ui.main.MainPageFragment">
+    tools:context=".ui.main.MainFragment">
 
     <ImageButton
         android:id="@+id/btn_alarm"

@@ -17,7 +17,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.gyeongsotone.danplay.R
 
-class MainPageFragment : Fragment() {
+class MainFragment : Fragment() {
     var viewGroup: ViewGroup? = null
     private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth

@@ -18,6 +18,7 @@ import com.gyeongsotone.danplay.databinding.ActivityMyMatchDetailBinding
 import com.gyeongsotone.danplay.model.ListViewModel
 
 class MyMatchDetailActivity : AppCompatActivity() {
+
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private var mBinding: ActivityMyMatchDetailBinding? = null
