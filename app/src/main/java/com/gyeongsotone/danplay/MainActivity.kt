@@ -6,9 +6,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
-import com.google.android.material.navigation.NavigationBarView
 import com.gyeongsotone.danplay.ui.matchapply.ApplyFragment
-import com.gyeongsotone.danplay.ui.main.MainpageFragment
+import com.gyeongsotone.danplay.ui.main.MainPageFragment
 import com.gyeongsotone.danplay.ui.mypage.MyInfoFragment
 import com.gyeongsotone.danplay.ui.matchsearch.SearchFragment
 
@@ -18,7 +17,7 @@ class MainActivity : AppCompatActivity() {
     private var bottomNav: BottomNavigationView? = null
 
     //프래그먼트 생성
-    private val mainFragment = MainpageFragment()
+    private val mainFragment = MainPageFragment()
     private val myInfoFragment = MyInfoFragment()
     private val searchFragment = SearchFragment()
     private val applyFragment = ApplyFragment()

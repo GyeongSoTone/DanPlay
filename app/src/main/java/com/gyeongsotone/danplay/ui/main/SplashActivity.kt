@@ -1,5 +1,6 @@
 package com.gyeongsotone.danplay.ui.main
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.os.Handler
 import com.gyeongsotone.danplay.R
 import com.gyeongsotone.danplay.ui.membership.LoginActivity
 
+@SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

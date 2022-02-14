@@ -32,13 +32,9 @@ class SearchFragment : Fragment() {
             val intent = Intent(requireActivity().applicationContext, FilterActivity::class.java)
             startActivity(intent)
         }
-
         // matchDb 접근하여 전체 데이터 가져와서 뿌려주기
         database = Firebase.database.reference
-
-        val matchDb = database.child("match")
         var listItem = arrayListOf<ListViewModel>()
-
         database.get().addOnSuccessListener {
             listItem = getMatchDb(it)
             getListView(listItem)
@@ -130,7 +126,7 @@ class SearchFragment : Fragment() {
         getListView(selectedListItem)
     }
 
-    fun getListView(listItem: ArrayList<ListViewModel>) {
+    private fun getListView(listItem: ArrayList<ListViewModel>) {
         val listview = viewGroup!!.findViewById<ListView>(R.id.mainListView)
         val listviewAdapter = ListViewAdapter(listItem)
         listview.adapter = listviewAdapter
